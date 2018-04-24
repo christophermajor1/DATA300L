@@ -8,25 +8,20 @@
   </head>
   <body>
     <script>
-      function cleanup(data) {
+      /*function cleanup(data) {
         // remove unneeded columns
         data.forEach(function(obj) {
-          delete obj["full_motion_video"];
-          delete obj["impressions"];
-          delete obj["onsite_audio"];
-          delete obj ["pricing_model"];
-          delete obj ["unit_all_one_month_"];
-          delete obj ["cpm"];
-          delete obj ["dec"];
+          delete obj["Time"];
+          delete obj["Location"];
+          delete obj["Activity Type"];
         });
         return data;
-      }
-
-      d3.json("https://data.cityofnewyork.us/resource/j9pm-b2jx.json",
-          function(error, raw_data) {
-            var data = cleanup(raw_data);
-
-            var columns = Object.keys(data[0]).sort();
+      }*/
+      d3.csv("updated_runnning_log.csv", function(data) {
+            for (var i = 0; i < data.length; i++) {
+              console.log(data[i].Distance);
+            }
+            /*var columns = Object.keys(data[0]).sort();
             d3.select("body")
               .append("h1")
               .text("Revenue Statistics for Times Square")
@@ -221,7 +216,7 @@
               .append("p")
               .attr("id", "design")
               .html("For the last assignment, the table look very cluttered. To fix that, I added a 5px padding on the th and td attributes. <br> I chose to center the table, svgs, and headers in order to make the page look more organized. <br> I chose to make the bars and circles red so that the data values stick out on the page. Additionally, the SVG background color is grey to clearly separate it from the rest of the contents of the page.");
-
+*/
             d3.select("body")
               .append("p")
               .attr("id", "footer")
