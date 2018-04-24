@@ -1,0 +1,26 @@
+body {
+  text-align: center;
+  font-family: verdana;
+}
+
+table {
+  border: 1px solid black;
+  margin: auto;
+}
+
+p {
+  text-align: justify;
+}
+
+th, td {
+  padding: 5px;
+}
+
+svg {
+  background-color: #cccccc;
+}
+
+#footer {
+  font-size: 12px;
+  text-align: justify;
+}
