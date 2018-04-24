@@ -2,19 +2,231 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
+    <title>Hw5 - Project Prototype</title>
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <link rel="stylesheet" href="hw5.css">
   </head>
   <body>
-    <h1>Running data</h1>
-    <p>Seen here is a data set showing running data etc. ect . etc. </p>
-    <div class="footer">Class:Data 330L, Names:Drew Burns, Chris Major Date: 4/24/18, Using personal data in CSV file format</div>
-
     <script>
-      d3.CSV...
+      function cleanup(data) {
+        // remove unneeded columns
+        data.forEach(function(obj) {
+          delete obj["full_motion_video"];
+          delete obj["impressions"];
+          delete obj["onsite_audio"];
+          delete obj ["pricing_model"];
+          delete obj ["unit_all_one_month_"];
+          delete obj ["cpm"];
+          delete obj ["dec"];
+        });
+        return data;
+      }
 
+      d3.json("https://data.cityofnewyork.us/resource/j9pm-b2jx.json",
+          function(error, raw_data) {
+            var data = cleanup(raw_data);
 
+            var columns = Object.keys(data[0]).sort();
+            d3.select("body")
+              .append("h1")
+              .text("Revenue Statistics for Times Square")
 
+            var table = d3.select("body").append("table");
+            var thead = table.append("thead");
+            var tbody = table.append("tbody");
+
+            thead.append("tr").selectAll("th")
+              .data(columns)
+              .enter()
+              .append("th")
+              .text(function(d) { return d; });
+
+            var rows = tbody.selectAll("tr")
+              .data(data)
+              .enter()
+              .append("tr");
+
+            var cells = rows.selectAll("td")
+              .data(function(row) {
+                return d3.range(Object.keys(row).length).
+                map(function(column, i) {
+                  return row[columns[i]];
+                });
+              })
+              .enter()
+              .append("td")
+              .text(function(d) { return d; });
+
+            var padding = 20;
+            var w = 750;
+            var h = 500;
+
+            d3.select("body")
+              .append("h2")
+              .html("Cost per Square Foot");
+
+            var svg = d3.select("body")
+              .append("svg")
+              .attr("width", w)
+              .attr("height", h);
+
+            var xScaleBar = d3.scaleBand()
+              .domain(d3.range(data.length))
+              .rangeRound([0, w])
+              .paddingInner(0.05);
+
+            var yScaleBar = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return d["cost_per_sf"] * 1; })])
+              .range([h, padding]);
+
+            var xAxisBar = d3.axisBottom()
+              .scale(xScaleBar)
+              .ticks(10);
+
+            var yAxisBar = d3.axisRight()
+              .scale(yScaleBar)
+              .ticks(10);
+
+            svg.selectAll("rect")
+              .data(data)
+              .enter()
+              .append("rect")
+              .attr("x", function(d, i) {
+                return xScaleBar(i) + 50;
+              })
+              .attr("y", function(d) {
+                return yScaleBar(d["cost_per_sf"]) - padding;
+              })
+              .attr("width", xScaleBar.bandwidth())
+              .attr("height", function(d) {
+                return h - yScaleBar(d["cost_per_sf"]);
+              })
+              .attr("fill", function(d) {
+                return "rgb(" + Math.round(d["cost_per_sf"] * 10) + ", 0, 0)";
+              });
+
+            svg.selectAll("text")
+              .data(data)
+              .enter()
+              .append("text")
+              .text(function(d) {
+                return d["cost_per_sf"];
+              })
+              .attr("text-anchor", "middle")
+              .attr("x", function(d, i) {
+                return (xScaleBar(i) + xScaleBar.bandwidth() / 2) + 50;
+              })
+              .attr("y", function(d) {
+                return yScaleBar(d["cost_per_sf"]) - 10;
+              })
+              .attr("font-family", "verdana")
+              .attr("font-size", "12px")
+              .attr("fill", "white");
+
+            svg.append("g")
+              .attr("class", "axis")
+              .attr("transform", "translate(" + padding + "," + (h - padding) + ")")
+              .call(xAxisBar);
+
+            svg.append("g")
+              .attr("class", "axis")
+              .attr("transform", "translate(" + padding + "," + (padding * -1) + ")")
+              .call(yAxisBar);
+
+            d3.select("body")
+              .append("p")
+              .text("The building with the highest cost per square foot is unnamed in this dataset. The brighter the bar, the higher the cost per square foot.");
+
+            d3.select("body")
+              .append("h2")
+              .html("Cost per Minute vs. Rate ")
+
+            var svg2 = d3.select("body")
+              .append("svg")
+              .attr("width", w)
+              .attr("height", h);
+
+            var xScalePlot = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return d["cost_per_minute"]; })])
+              .range([padding, w - padding]);
+
+            var yScalePlot = d3.scaleLinear()
+              // I am beyond confused why this works as opposed to just "return d["rate"]", but it does.
+              .domain([0, d3.max(data, function(d) { return d["rate"] * 1; })])
+              .range([h - padding, padding]);
+
+            var rScale = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return d["rate"]; })])
+              .range([2, 5]);
+
+            var xAxisPlot = d3.axisBottom()
+              .scale(xScalePlot)
+              .ticks(10);
+
+            var yAxisPlot = d3.axisRight()
+              .scale(yScalePlot)
+              .ticks(10);
+
+            svg2.selectAll("circle")
+              .data(data)
+              .enter()
+              .append("circle")
+              .attr("cx", function(d) {
+                return xScalePlot(d["cost_per_minute"]);
+              })
+              .attr("cy", function(d) {
+                return yScalePlot(d["rate"]);
+              })
+              .attr("r", function(d) {
+                return rScale(d["rate"]);
+              })
+              .attr("fill", "red");
+
+            svg2.selectAll("text")
+              .data(data)
+              .enter()
+              .append("text")
+              .text(function(d) {
+                return d["cost_per_minute"] + "," + d["rate"];
+              })
+              .attr("x", function(d) {
+                return xScalePlot(d["cost_per_minute"] - 8);
+              })
+              .attr("y", function(d) {
+                return yScalePlot(d["rate"]);
+              })
+              .attr("font-family", "verdana")
+              .attr("font-size", "12px")
+              .attr("fill", "black");
+
+            svg2.append("g")
+              .attr("class", "axis")
+              .attr("transform", "translate(0," + (h - padding) + ")")
+              .call(xAxisPlot);
+
+            svg2.append("g")
+              .attr("class", "axis")
+              .attr("transform", "translate(" + padding + ",0)")
+              .call(yAxisPlot);
+
+            d3.select("body")
+              .append("p")
+              .html("As you can see, the circles at the top have a larger radius than the circles at the bottom. This is because the radii are scaled to the rate and the rate is on the y-axis. <br> The x-axis is the cost per minute.");
+
+            d3.select("body")
+              .append("h2")
+              .html("Design Choices")
+
+            d3.select("body")
+              .append("p")
+              .attr("id", "design")
+              .html("For the last assignment, the table look very cluttered. To fix that, I added a 5px padding on the th and td attributes. <br> I chose to center the table, svgs, and headers in order to make the page look more organized. <br> I chose to make the bars and circles red so that the data values stick out on the page. Additionally, the SVG background color is grey to clearly separate it from the rest of the contents of the page.");
+
+            d3.select("body")
+              .append("p")
+              .attr("id", "footer")
+              .html("DATA 300L - 111 <br> Christopher Major <br> 03/25/2018 <br> <a href='https://data.cityofnewyork.us/City-Government/Revenue-Comps/sv6e-j8t9' target='_blank'> Dataset </a>");
+          });
     </script>
-
   </body>
 </html>
