@@ -1,12 +1,15 @@
-
+body {
+  text-align: center;
+  font-family: verdana;
+}
 
 #running { border: 1px solid black; }
-    #running th, td { padding: 0 1em 0.5ex;  }
-    #running tr { background: #eee; }
-    #running tr:nth-child(even) { background: #cccccc; }
-    #running tr:nth-child(odd) {background: #FFF; }
-    #running th.center, td.center { text-align: center; }
-    #running th.num, td.num { text-align: right; }
+#running th, td { padding: 0 1em 0.5ex;  }
+#running tr { background: #eee; }
+#running tr:nth-child(even) { background: #FFF; }
+#running tr:nth-child(odd) {background: #cccccc; }
+#running th.center, td.center { text-align: center; }
+#running th.num, td.num { text-align: right; }
 p {
   text-align: justify;
 }
@@ -16,6 +19,6 @@ svg {
 }
 
 #footer {
-  font-size: 20px;
+  font-size: 12px;
   text-align: justify;
 }
