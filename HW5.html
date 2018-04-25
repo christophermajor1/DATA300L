@@ -18,13 +18,10 @@
         return data;
       }*/
       d3.csv("updated_runnning_log.csv", function(data) {
-            for (var i = 0; i < data.length; i++) {
-              console.log(data[i].Distance);
-            }
-            /*var columns = Object.keys(data[0]).sort();
+            var columns = Object.keys(data[0]).sort();
             d3.select("body")
               .append("h1")
-              .text("Revenue Statistics for Times Square")
+              .text("Running Data")
 
             var table = d3.select("body").append("table");
             var thead = table.append("thead");
@@ -52,7 +49,7 @@
               .append("td")
               .text(function(d) { return d; });
 
-            var padding = 20;
+            /*var padding = 20;
             var w = 750;
             var h = 500;
 
