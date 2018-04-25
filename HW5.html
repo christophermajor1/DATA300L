@@ -55,6 +55,7 @@
 
             var svg = d3.select("body")
               .append("svg")
+              .attr("id", "bar-chart")
               .attr("width", w)
               .attr("height", h);
 
@@ -64,7 +65,7 @@
               .paddingInner(0.05);
 
             var yScaleBar = d3.scaleLinear()
-              .domain([0, d3.max(data, function(d) { return parseFloat(d["Calories"]); })])
+              .domain([0, d3.max(data, function(d) { return parseFloat(d["Max HR"]); })])
               .range([h, padding]);
 
             var yAxisBar = d3.axisRight()
@@ -79,16 +80,38 @@
                 return xScaleBar(i) + 10;
               })
               .attr("y", function(d) {
-                return yScaleBar(d["Calories"]) - padding;
+                return yScaleBar(d["Avg HR"]) - padding;
               })
               .attr("width", xScaleBar.bandwidth())
               .attr("height", function(d) {
-                return h - yScaleBar(d["Calories"]);
+                return h - yScaleBar(d["Avg HR"]);
               })
               .attr("fill", function(d) {
                 return "rgb(200, 0, 0)";
               });
 
+              //On click, update with new data      
+              d3.select("#bar-chart").on("click", function() {    //svgBar.on
+              //update barchart 
+              svg.selectAll("rect")
+              .data(data)
+              .transition()  
+              .delay(1000)             
+              .duration(3000)
+              .attr("x", function(d, i) {
+                return xScaleBar(i) + 10;
+              })
+              .attr("y", function(d) {
+                return yScaleBar(d["Max HR"]) - padding;
+              })
+              .attr("width", xScaleBar.bandwidth())
+              .attr("height", function(d) {
+                return h - yScaleBar(d["Max HR"]);
+              })
+              .attr("fill", function(d) {
+                return "rgb(200, 0, 0)";
+              });
+            });
             /*svg.selectAll("text")
               .data(data)
               .enter()
