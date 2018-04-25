@@ -15,16 +15,7 @@ p {
 th, td {
   padding: 0 1em 0.5ex; 
 }
- tr { background: #eee; }
- tr { background: #eee; }
- tr:nth-child(even) {background: #CCC}
- tr:nth-child(odd) {background: #FFF}
- th.center, td.center { text-align: center; }
- th.num, td.num { text-align: right; }
 
- th { text-align: left; background: #333; 
-    color: white; border: 1px solid black;}
-    
 svg {
   background-color: #cccccc;
 }
