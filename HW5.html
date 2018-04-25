@@ -89,29 +89,28 @@ Distance<!doctype html>
               .attr("fill", function(d) {
                 return "rgb(200, 0, 0)";
               });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            //On click, update with new data      
+            d3.select("#bar-chart").on("click", function() {    //svgBar.on
+              //update barchart 
+              svg.selectAll("rect")
+              .data(data)
+              .transition()  
+              .delay(1000)             
+              .duration(3000)
+              .attr("x", function(d, i) {
+                return xScaleBar(i) + 10;
+              })
+              .attr("y", function(d) {
+                return yScaleBar(d["Max HR"]) - padding;
+              })
+              .attr("width", xScaleBar.bandwidth())
+              .attr("height", function(d) {
+                return h - yScaleBar(d["Max HR"]);
+              })
+              .attr("fill", function(d) {
+                return "rgb(200, 0, 0)";
+              });
+            });
 
             /*svg.selectAll("text")
               .data(data)
