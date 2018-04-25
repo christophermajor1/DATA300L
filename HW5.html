@@ -1,4 +1,4 @@
-<!doctype html>
+Distance<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
@@ -64,7 +64,7 @@
               .paddingInner(0.05);
 
             var yScaleBar = d3.scaleLinear()
-              .domain([0, d3.max(data, function(d) { return parseFloat(d["Calories"]); })])
+              .domain([0, d3.max(data, function(d) { return d["Calories"]; })])
               .range([h, padding]);
 
             var yAxisBar = d3.axisRight()
@@ -114,11 +114,11 @@
 
             /*d3.select("body")
               .append("p")
-              .text("The building with the highest cost per square foot is unnamed in this dataset. The brighter the bar, the higher the cost per square foot.");
+              .text("The building with the highest cost per square foot is unnamed in this dataset. The brighter the bar, the higher the cost per square foot.");*/
 
             d3.select("body")
               .append("h2")
-              .html("Cost per Minute vs. Rate ")
+              .html("Scatter Plots")
 
             var svg2 = d3.select("body")
               .append("svg")
@@ -126,19 +126,14 @@
               .attr("height", h);
 
             var xScalePlot = d3.scaleLinear()
-              .domain([0, d3.max(data, function(d) { return d["cost_per_minute"]; })])
+              .domain([0, d3.max(data, function(d) { return (d["Distance"]); })])
               .range([padding, w - padding]);
 
             var yScalePlot = d3.scaleLinear()
-              // I am beyond confused why this works as opposed to just "return d["rate"]", but it does.
-              .domain([0, d3.max(data, function(d) { return d["rate"] * 1; })])
+              .domain([0, d3.max(data, function(d) { return d["Calories"]; })])
               .range([h - padding, padding]);
 
-            var rScale = d3.scaleLinear()
-              .domain([0, d3.max(data, function(d) { return d["rate"]; })])
-              .range([2, 5]);
-
-            var xAxisPlot = d3.axisBottom()
+            var xAxisPlot = d3.axisTop()
               .scale(xScalePlot)
               .ticks(10);
 
@@ -151,32 +146,30 @@
               .enter()
               .append("circle")
               .attr("cx", function(d) {
-                return xScalePlot(d["cost_per_minute"]);
+                return xScalePlot(d["Distance"] * 10);
               })
               .attr("cy", function(d) {
-                return yScalePlot(d["rate"]);
+                return yScalePlot(d["Calories"]);
               })
-              .attr("r", function(d) {
-                return rScale(d["rate"]);
-              })
+              .attr("r", "2")
               .attr("fill", "red");
 
-            svg2.selectAll("text")
+            /*svg2.selectAll("text")
               .data(data)
               .enter()
               .append("text")
               .text(function(d) {
-                return d["cost_per_minute"] + "," + d["rate"];
+                return d["Distance"] + "," + d["Calories"];
               })
               .attr("x", function(d) {
-                return xScalePlot(d["cost_per_minute"] - 8);
+                return xScalePlot(d["Distance"]);
               })
               .attr("y", function(d) {
-                return yScalePlot(d["rate"]);
+                return yScalePlot(d["Calories"]);
               })
               .attr("font-family", "verdana")
               .attr("font-size", "12px")
-              .attr("fill", "black");
+              .attr("fill", "black");*/
 
             svg2.append("g")
               .attr("class", "axis")
@@ -188,7 +181,7 @@
               .attr("transform", "translate(" + padding + ",0)")
               .call(yAxisPlot);
 
-            d3.select("body")
+            /*d3.select("body")
               .append("p")
               .html("As you can see, the circles at the top have a larger radius than the circles at the bottom. This is because the radii are scaled to the rate and the rate is on the y-axis. <br> The x-axis is the cost per minute.");
 
