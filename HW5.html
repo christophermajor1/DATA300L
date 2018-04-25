@@ -45,8 +45,8 @@
               .append("td")
               .text(function(d) { return d; });
 
-            /*var padding = 20;
-            var w = 750;
+            var padding = 20;
+            var w = 7500;
             var h = 500;
 
             d3.select("body")
@@ -64,12 +64,8 @@
               .paddingInner(0.05);
 
             var yScaleBar = d3.scaleLinear()
-              .domain([0, d3.max(data, function(d) { return d["cost_per_sf"] * 1; })])
+              .domain([0, d3.max(data, function(d) { return parseFloat(d["Calories"]); })])
               .range([h, padding]);
-
-            var xAxisBar = d3.axisBottom()
-              .scale(xScaleBar)
-              .ticks(10);
 
             var yAxisBar = d3.axisRight()
               .scale(yScaleBar)
@@ -83,14 +79,14 @@
                 return xScaleBar(i) + 50;
               })
               .attr("y", function(d) {
-                return yScaleBar(d["cost_per_sf"]) - padding;
+                return yScaleBar(d["Calories"]) - padding;
               })
               .attr("width", xScaleBar.bandwidth())
               .attr("height", function(d) {
-                return h - yScaleBar(d["cost_per_sf"]);
+                return h - yScaleBar(d["Calories"]);
               })
               .attr("fill", function(d) {
-                return "rgb(" + Math.round(d["cost_per_sf"] * 10) + ", 0, 0)";
+                return "rgb(200, 0, 0)";
               });
 
             svg.selectAll("text")
@@ -98,14 +94,14 @@
               .enter()
               .append("text")
               .text(function(d) {
-                return d["cost_per_sf"];
+                return d["Calories"];
               })
               .attr("text-anchor", "middle")
               .attr("x", function(d, i) {
                 return (xScaleBar(i) + xScaleBar.bandwidth() / 2) + 50;
               })
               .attr("y", function(d) {
-                return yScaleBar(d["cost_per_sf"]) - 10;
+                return yScaleBar(d["Calories"]) - 10;
               })
               .attr("font-family", "verdana")
               .attr("font-size", "12px")
@@ -113,15 +109,10 @@
 
             svg.append("g")
               .attr("class", "axis")
-              .attr("transform", "translate(" + padding + "," + (h - padding) + ")")
-              .call(xAxisBar);
-
-            svg.append("g")
-              .attr("class", "axis")
               .attr("transform", "translate(" + padding + "," + (padding * -1) + ")")
               .call(yAxisBar);
 
-            d3.select("body")
+            /*d3.select("body")
               .append("p")
               .text("The building with the highest cost per square foot is unnamed in this dataset. The brighter the bar, the higher the cost per square foot.");
 
