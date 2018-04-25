@@ -8,22 +8,13 @@
   </head>
   <body>
     <script>
-      /*function cleanup(data) {
-        // remove unneeded columns
-        data.forEach(function(obj) {
-          delete obj["Time"];
-          delete obj["Location"];
-          delete obj["Activity Type"];
-        });
-        return data;
-      }*/
       d3.csv("updated_runnning_log.csv", function(data) {
             var columns = Object.keys(data[0]).sort();
             d3.select("body")
               .append("h1")
               .text("Running Data")
 
-            var table = d3.select("body").append("table");
+            var table = d3.select("body").append("table").attr("id", "running");
             var thead = table.append("thead");
             var tbody = table.append("tbody");
 
@@ -217,7 +208,7 @@
             d3.select("body")
               .append("p")
               .attr("id", "footer")
-              .html("DATA 300L - 111 <br> Christopher Major <br> 04/25/2018 <br> <a href='https://data.cityofnewyork.us/City-Government/Revenue-Comps/sv6e-j8t9' target='_blank'> Dataset </a>");
+              .html("DATA 300L - 111 <br> Andrew Burns, Christopher Major <br> 04/25/2018 <br> <a href='updated_runnning_log.csv' target='_blank'> Dataset </a>");
           });
     </script>
   </body>
