@@ -73,12 +73,20 @@
               .domain([0, d3.max(data, function(d) { return parseFloat(d["Max HR"]); })])
               .range([h, padding]);
 
+            var yScaleAvgHR = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return parseFloat(d["Avg HR"]); })])
+              .range([h, padding]);
+
             var yAxisCal = d3.axisRight()
               .scale(yScaleCal)
               .ticks(10);
 
             var yAxisMaxHR = d3.axisRight()
               .scale(yScaleMaxHR)
+              .ticks(10);
+
+            var yAxisAvgHR = d3.axisRight()
+              .scale(yScaleAvgHR)
               .ticks(10);
 
             svg.selectAll("rect")
@@ -96,7 +104,17 @@
               .attr("height", function(d) {
                 return h - yScaleCal(d["Calories"]);
               })
-              .attr("fill", "crimson");
+              .attr("fill", "crimson")
+
+              // mouseover 
+              .on("mouseover", function() {
+                d3.select(this)
+                .attr("fill", "darkblue");
+              })
+              .on("mouseout", function(d) {
+                d3.select(this)
+                .attr("fill", "crimson");
+               });
 
             svg.append("g")
               .attr("class", "axis")
@@ -105,6 +123,7 @@
             d3.select("body")
               .append("p")
               .attr("id", "bar-chart-footer");
+
             d3.select("#bar-chart-footer")
               .append("button")
               .attr("class", "button")
@@ -170,6 +189,40 @@
                   .call(yAxisMaxHR);
               })
               .html("Max HR");
+
+              //update to Avg HR
+              d3.select("#bar-chart-footer")
+              .append("button")
+              .attr("class", "button")
+              .on("click", function() {
+                d3.select("#bar-chart-header")
+                  .html("Avg HR")
+                  .transition();
+
+                //update barchart
+                svg.selectAll("rect")
+                  .data(data)
+                  .transition()
+                  .duration(3000)
+                  .attr("class", "Avg-HR")
+                  .attr("x", function(d, i) {
+                    return xScaleBar(i);
+                  })
+                  .attr("y", function(d) {
+                    return yScaleAvgHR(d["Avg HR"]) - padding;
+                  })
+                  .attr("width", xScaleBar.bandwidth())
+                  .attr("height", function(d) {
+                    return h - yScaleAvgHR(d["Avg HR"]);
+                  })
+                  .attr("fill", "crimson");
+
+                svg.select(".axis")
+                  .transition()
+                  .duration(3000)
+                  .call(yAxisAvgHR);
+              })
+              .html("Avg HR");
 
             /*svg.selectAll("text")
               .data(data)
