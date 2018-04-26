@@ -77,6 +77,10 @@
               .domain([0, d3.max(data, function(d) { return parseFloat(d["Avg HR"]); })])
               .range([h, padding]);
 
+            var yScaleMaxCadence = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return parseFloat(d["Max Cadence"]); })])
+              .range([h, padding]);
+
             var yAxisCal = d3.axisRight()
               .scale(yScaleCal)
               .ticks(10);
@@ -87,6 +91,10 @@
 
             var yAxisAvgHR = d3.axisRight()
               .scale(yScaleAvgHR)
+              .ticks(10);
+
+            var yAxisMaxCadence = d3.axisRight()
+              .scale(yScaleMaxCadence)
               .ticks(10);
 
             svg.selectAll("rect")
@@ -223,6 +231,40 @@
                   .call(yAxisAvgHR);
               })
               .html("Avg HR");
+
+              //update to Max Cadence
+              d3.select("#bar-chart-footer")
+              .append("button")
+              .attr("class", "button")
+              .on("click", function() {
+                d3.select("#bar-chart-header")
+                  .html("Max Cadence")
+                  .transition();
+
+                //update barchart
+                svg.selectAll("rect")
+                  .data(data)
+                  .transition()
+                  .duration(3000)
+                  .attr("class", "Max-Cadence")
+                  .attr("x", function(d, i) {
+                    return xScaleBar(i);
+                  })
+                  .attr("y", function(d) {
+                    return yScaleMaxCadence(d["Max Cadence"]) - padding;
+                  })
+                  .attr("width", xScaleBar.bandwidth())
+                  .attr("height", function(d) {
+                    return h - yScaleMaxCadence(d["Max Cadence"]);
+                  })
+                  .attr("fill", "crimson");
+
+                svg.select(".axis")
+                  .transition()
+                  .duration(3000)
+                  .call(yAxisMaxCadence);
+              })
+              .html("Max Cadence");
 
             /*svg.selectAll("text")
               .data(data)
