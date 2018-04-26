@@ -5,7 +5,7 @@ body {
 
 #intro { text-align: justify; }
 
-#running { 
+#running {
   border: 1px solid black;
   font-size: 12px;
 }
@@ -15,15 +15,28 @@ body {
 #running tr:nth-child(odd) {background: #cccccc; }
 #running th.center, td.center { text-align: center; }
 #running th.num, td.num { text-align: right; }
-p {
-  text-align: justify;
-}
+p { text-align: justify; }
 
-svg {
-  background-color: #cccccc;
-}
+svg { background-color: #cccccc; }
 
 #footer {
   font-size: 12px;
   text-align: justify;
+}
+
+#bar-chart-footer { text-align: center; }
+
+.button {
+    background-color: crimson;
+    border: none;
+    color: white;
+    padding: 15px 25px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 2px;
+}
+
+.button:hover {
+    background-color: green;
 }
