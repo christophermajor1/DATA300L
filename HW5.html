@@ -90,14 +90,12 @@
               .domain([0, d3.max(data, function(d) { return parseFloat(d["Avg HR"]); })])
               .range([h, padding]);
 
-<<<<<<< HEAD
-            // calorie axis
-=======
+            // max cadence scale
             var yScaleMaxCadence = d3.scaleLinear()
               .domain([0, d3.max(data, function(d) { return parseFloat(d["Max Cadence"]); })])
               .range([h, padding]);
 
->>>>>>> 47643bc4663f3b2318c8fba85a49d84bb2533c33
+            // calorie axis
             var yAxisCal = d3.axisRight()
               .scale(yScaleCal)
               .ticks(10);
@@ -112,6 +110,7 @@
               .scale(yScaleAvgHR)
               .ticks(10);
 
+            // max cadence axis
             var yAxisMaxCadence = d3.axisRight()
               .scale(yScaleMaxCadence)
               .ticks(10);
@@ -190,7 +189,7 @@
               })
               .html("Calories");
 
-            // append Max HR transition button
+            // append max hr transition button
             d3.select("#bar-chart-footer")
               .append("button")
               .attr("class", "button")
@@ -226,7 +225,7 @@
               })
               .html("Max HR");
 
-              // append Avg HR transition button
+              // append avg hr transition button
               d3.select("#bar-chart-footer")
               .append("button")
               .attr("class", "button")
@@ -262,7 +261,7 @@
               })
               .html("Avg HR");
 
-              //update to Max Cadence
+              // append max cadence transition button
               d3.select("#bar-chart-footer")
               .append("button")
               .attr("class", "button")
@@ -271,7 +270,7 @@
                   .html("Max Cadence")
                   .transition();
 
-                //update barchart
+                // update barchart
                 svg.selectAll("rect")
                   .data(data)
                   .transition()
@@ -289,6 +288,7 @@
                   })
                   .attr("fill", "crimson");
 
+                // update axis
                 svg.select(".axis")
                   .transition()
                   .duration(3000)
