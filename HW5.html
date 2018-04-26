@@ -9,31 +9,37 @@
   <body>
     <script>
       d3.csv("updated_runnning_log.csv", function(data) {
-            var columns = Object.keys(data[0]);
+            // main header
             d3.select("body")
               .append("h1")
               .text("Running Data")
 
+            // introductory paragraph
             d3.select("body")
               .append("p")
               .attr("id", "intro")
               .text("Our group consists of Christopher Major, a data science & analytics major, and Drew Burns, an information technology major and division one runner. Together, we decided that running data found on my smart watch might be an interesting place to compare and visualize data. The data available for this study includes running history recorded on my smart watch almost every day from 2016 to present . This including variables such as…… location, activity type, time, average/best pace, average heart rate/maximum heart rate, average stride length, calories burned, elevation gained/ lost, average and maximum cadence, distance, etc. In the running community a wide range of athletes use Garmin technologies to obtain information to further their knowledge of their body and their overall training. Our objective is to make visualizations and conclusions based off of my running data in the hope other people could benefit from our visualization as well. Anyone with a Garmin product can log into their account and export the data they have accumulated in the same formatted CSV file as mine. This makes our visualization compatible for various athletes worldwide. The story we hope to tell is how heart rate dictates your overall fitness level. This will be accomplished using charts to show data like distances run over time, the pace those runs were at, and the average heart rate. I expect our results to show that on average, running a similar pace in the beginning of your training will result in a higher heart rate than at the completion of your training. Other interesting things to visualize for users could be how your cadence and stride length are related, and how those would then relate to your pace. However, the relation between pace and heart rate is our main focus in the project. While making accurate conclusions based solely off my own personal data will be inaccurate due to a small sample size and other outside factors, I hope to make some general conclusions based off the data available to me through both my Garmin Vívoactive smartwatch and Garmin soft strap premium heart rate monitor through visualizations. Outlined below are some studies and data sets we will potentially be referencing for information about similar studies that relate to our topic. Attached is a draft of an old CSV file of my running data.");
 
+            // table variables
+            var columns = Object.keys(data[0]);
             var table = d3.select("body").append("table").attr("id", "running");
             var thead = table.append("thead");
             var tbody = table.append("tbody");
 
+            // load dataset columns
             thead.append("tr").selectAll("th")
               .data(columns)
               .enter()
               .append("th")
               .text(function(d) { return d; });
 
+            // load dataset rows
             var rows = tbody.selectAll("tr")
               .data(data)
               .enter()
               .append("tr");
 
+            // load dataset values
             var cells = rows.selectAll("td")
               .data(function(row) {
                 return d3.range(Object.keys(row).length).
@@ -45,50 +51,61 @@
               .append("td")
               .text(function(d) { return d; });
 
+            // chart variables
             var padding = 5;
             var w = 1377;
             var h = 500;
 
+            // barchart headers
             d3.select("body")
               .append("h2")
               .attr("id", "bar-chart-header")
               .html("Calories");
 
+            // barchart svg
             var svg = d3.select("body")
               .append("svg")
               .attr("class", "bar-chart")
               .attr("width", w)
               .attr("height", h);
 
+            // barchart x-scale
             var xScaleBar = d3.scaleBand()
               .domain(d3.range(data.length))
               .rangeRound([0, w])
               .paddingInner(0.5);
 
+            // calorie y-scale
             var yScaleCal = d3.scaleLinear()
               .domain([0, d3.max(data, function(d) { return parseFloat(d["Calories"]); })])
               .range([h, padding]);
 
+            // max hr y-scale
             var yScaleMaxHR = d3.scaleLinear()
               .domain([0, d3.max(data, function(d) { return parseFloat(d["Max HR"]); })])
               .range([h, padding]);
 
+            // avg hr y-scale
             var yScaleAvgHR = d3.scaleLinear()
               .domain([0, d3.max(data, function(d) { return parseFloat(d["Avg HR"]); })])
               .range([h, padding]);
 
+            // calorie axis
             var yAxisCal = d3.axisRight()
               .scale(yScaleCal)
               .ticks(10);
 
+            // max hr axis
             var yAxisMaxHR = d3.axisRight()
               .scale(yScaleMaxHR)
               .ticks(10);
 
+            // avg hr axis
             var yAxisAvgHR = d3.axisRight()
               .scale(yScaleAvgHR)
               .ticks(10);
 
+            // append calorie bar chart
             svg.selectAll("rect")
               .data(data)
               .enter()
@@ -106,7 +123,7 @@
               })
               .attr("fill", "crimson")
 
-              // mouseover 
+              // mouseover
               .on("mouseover", function() {
                 d3.select(this)
                 .attr("fill", "darkblue");
@@ -116,23 +133,28 @@
                 .attr("fill", "crimson");
                });
 
+            // append calorie axis
             svg.append("g")
               .attr("class", "axis")
               .attr("transform", "translate(" + padding + "," + (padding * -1) + ")")
               .call(yAxisCal);
+
+            // append footer
             d3.select("body")
               .append("p")
               .attr("id", "bar-chart-footer");
 
+            // append calorie transition button
             d3.select("#bar-chart-footer")
               .append("button")
               .attr("class", "button")
               .on("click", function() {
+                // update header
                 d3.select("#bar-chart-header")
                   .html("Calories")
                   .transition();
 
-                //update barchart
+                // update barchart
                 svg.selectAll("rect")
                   .data(data)
                   .transition()
@@ -150,6 +172,7 @@
                   })
                   .attr("fill", "crimson");
 
+                // update axis
                 svg.select(".axis")
                   .transition()
                   .duration(3000)
@@ -157,15 +180,17 @@
               })
               .html("Calories");
 
+            // append Max HR transition button
             d3.select("#bar-chart-footer")
               .append("button")
               .attr("class", "button")
               .on("click", function() {
+                // update header
                 d3.select("#bar-chart-header")
                   .html("Max HR")
                   .transition();
 
-                //update barchart
+                // update barchart
                 svg.selectAll("rect")
                   .data(data)
                   .transition()
@@ -183,6 +208,7 @@
                   })
                   .attr("fill", "crimson");
 
+                // update axis
                 svg.select(".axis")
                   .transition()
                   .duration(3000)
@@ -190,16 +216,17 @@
               })
               .html("Max HR");
 
-              //update to Avg HR
+              // append Avg HR transition button
               d3.select("#bar-chart-footer")
               .append("button")
               .attr("class", "button")
               .on("click", function() {
+                // update header
                 d3.select("#bar-chart-header")
                   .html("Avg HR")
                   .transition();
 
-                //update barchart
+                // update barchart
                 svg.selectAll("rect")
                   .data(data)
                   .transition()
@@ -217,6 +244,7 @@
                   })
                   .attr("fill", "crimson");
 
+                // update axis
                 svg.select(".axis")
                   .transition()
                   .duration(3000)
@@ -233,18 +261,14 @@
               })
               .attr("text-anchor", "middle")
               .attr("x", function(d, i) {
-                return (xScaleBar(i) + xScaleBar.bandwidth() / 2) + 50;
+                return xScaleBar(i);
               })
               .attr("y", function(d) {
-                return yScaleBar(d["Calories"]) - 10;
+                return yScaleCal(d["Calories"]) - 10;
               })
               .attr("font-family", "verdana")
               .attr("font-size", "12px")
               .attr("fill", "white");*/
-
-            /*d3.select("body")
-              .append("p")
-              .text("The building with the highest cost per square foot is unnamed in this dataset. The brighter the bar, the higher the cost per square foot.");*/
 
             d3.select("body")
               .append("h2")
@@ -311,19 +335,6 @@
               .attr("transform", "translate(" + padding + ",0)")
               .call(yAxisPlot);
 
-            /*d3.select("body")
-              .append("p")
-              .html("As you can see, the circles at the top have a larger radius than the circles at the bottom. This is because the radii are scaled to the rate and the rate is on the y-axis. <br> The x-axis is the cost per minute.");
-
-            d3.select("body")
-              .append("h2")
-              .html("Design Choices")
-
-            d3.select("body")
-              .append("p")
-              .attr("id", "design")
-              .html("For the last assignment, the table look very cluttered. To fix that, I added a 5px padding on the th and td attributes. <br> I chose to center the table, svgs, and headers in order to make the page look more organized. <br> I chose to make the bars and circles red so that the data values stick out on the page. Additionally, the SVG background color is grey to clearly separate it from the rest of the contents of the page.");
-*/
             d3.select("body")
               .append("p")
               .attr("id", "footer")
