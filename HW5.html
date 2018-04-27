@@ -75,6 +75,11 @@
               .rangeRound([0, w])
               .paddingInner(0.5);
 
+            // distance x-scale
+            var xScaleDist = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return parseFloat(d["Distance"]); })])
+              .range([padding, w - padding]);
+
             // calorie y-scale
             var yScaleCal = d3.scaleLinear()
               .domain([0, d3.max(data, function(d) { return parseFloat(d["Calories"]); })])
@@ -95,31 +100,36 @@
               .domain([0, d3.max(data, function(d) { return parseFloat(d["Max Cadence"]); })])
               .range([h, padding]);
 
-            // calorie axis
+            // distance x-axis
+            var xAxisDist = d3.axisTop()
+              .scale(xScaleDist)
+              .ticks(10);
+
+            // calorie y-axis
             var yAxisCal = d3.axisRight()
               .scale(yScaleCal)
               .ticks(10);
 
-            // max hr axis
+            // max hr y-axis
             var yAxisMaxHR = d3.axisRight()
               .scale(yScaleMaxHR)
               .ticks(10);
 
-            // avg hr axis
+            // avg hr y-axis
             var yAxisAvgHR = d3.axisRight()
               .scale(yScaleAvgHR)
               .ticks(10);
 
-            // max cadence axis
+            // max cadence y-axis
             var yAxisMaxCadence = d3.axisRight()
               .scale(yScaleMaxCadence)
               .ticks(10);
 
+            // append barchart
             svg.selectAll("rect")
               .data(data)
               .enter()
               .append("rect")
-              .attr("class", "calories")
               .attr("x", function(d, i) {
                 return xScaleBar(i);
               })
@@ -137,6 +147,7 @@
                 d3.select(this)
                 .attr("fill", "darkblue");
               })
+              // mouseout
               .on("mouseout", function(d) {
                 d3.select(this)
                 .attr("fill", "crimson");
@@ -148,13 +159,13 @@
               .attr("transform", "translate(" + padding + "," + (padding * -1) + ")")
               .call(yAxisCal);
 
-            // append footer
+            // append bar chart footer
             d3.select("body")
               .append("p")
-              .attr("id", "bar-chart-footer");
+              .attr("class", "chart-footer");
 
             // append calorie transition button
-            d3.select("#bar-chart-footer")
+            d3.select(".chart-footer")
               .append("button")
               .attr("class", "button")
               .on("click", function() {
@@ -168,7 +179,6 @@
                   .data(data)
                   .transition()
                   .duration(3000)
-                  .attr("class", "calories")
                   .attr("x", function(d, i) {
                     return xScaleBar(i);
                   })
@@ -190,7 +200,7 @@
               .html("Calories");
 
             // append max hr transition button
-            d3.select("#bar-chart-footer")
+            d3.select(".chart-footer")
               .append("button")
               .attr("class", "button")
               .on("click", function() {
@@ -204,7 +214,6 @@
                   .data(data)
                   .transition()
                   .duration(3000)
-                  .attr("class", "max-hr")
                   .attr("x", function(d, i) {
                     return xScaleBar(i);
                   })
@@ -225,8 +234,8 @@
               })
               .html("Max HR");
 
-              // append avg hr transition button
-              d3.select("#bar-chart-footer")
+            // append avg hr transition button
+            d3.select(".chart-footer")
               .append("button")
               .attr("class", "button")
               .on("click", function() {
@@ -240,7 +249,6 @@
                   .data(data)
                   .transition()
                   .duration(3000)
-                  .attr("class", "Avg-HR")
                   .attr("x", function(d, i) {
                     return xScaleBar(i);
                   })
@@ -261,8 +269,8 @@
               })
               .html("Avg HR");
 
-              // append max cadence transition button
-              d3.select("#bar-chart-footer")
+            // append max cadence transition button
+            d3.select(".chart-footer")
               .append("button")
               .attr("class", "button")
               .on("click", function() {
@@ -275,7 +283,6 @@
                   .data(data)
                   .transition()
                   .duration(3000)
-                  .attr("class", "Max-Cadence")
                   .attr("x", function(d, i) {
                     return xScaleBar(i);
                   })
@@ -314,42 +321,29 @@
               .attr("font-size", "12px")
               .attr("fill", "white");*/
 
+            // scatter plot headers
             d3.select("body")
               .append("h2")
               .html("Scatter Plots")
 
+            // scatter plot svg
             var svg2 = d3.select("body")
               .append("svg")
               .attr("width", w)
               .attr("height", h);
 
-            var xScalePlot = d3.scaleLinear()
-              .domain([0, d3.max(data, function(d) { return (d["Distance"]); })])
-              .range([padding, w - padding]);
-
-            var yScalePlot = d3.scaleLinear()
-              .domain([0, d3.max(data, function(d) { return d["Calories"]; })])
-              .range([h - padding, padding]);
-
-            var xAxisPlot = d3.axisTop()
-              .scale(xScalePlot)
-              .ticks(10);
-
-            var yAxisPlot = d3.axisRight()
-              .scale(yScalePlot)
-              .ticks(10);
-
+            // append scatter plot
             svg2.selectAll("circle")
               .data(data)
               .enter()
               .append("circle")
               .attr("cx", function(d) {
-                return xScalePlot(d["Distance"] * 10);
+                return xScaleDist(d["Distance"]);
               })
               .attr("cy", function(d) {
-                return yScalePlot(d["Calories"]);
+                return yScaleCal(d["Calories"]);
               })
-              .attr("r", "2")
+              .attr("r", "5")
               .attr("fill", "crimson");
 
             /*svg2.selectAll("text")
@@ -369,16 +363,24 @@
               .attr("font-size", "12px")
               .attr("fill", "black");*/
 
+            // append distance axis
             svg2.append("g")
               .attr("class", "axis")
               .attr("transform", "translate(0," + (h - padding) + ")")
-              .call(xAxisPlot);
+              .call(xAxisDist);
 
+            // .append calorie axis
             svg2.append("g")
               .attr("class", "axis")
               .attr("transform", "translate(" + padding + ",0)")
-              .call(yAxisPlot);
+              .call(yAxisCal);
 
+            // append scatter plot footer
+            d3.select("body")
+              .append("p")
+              .attr("class", "chart-footer");
+
+            // append footer
             d3.select("body")
               .append("p")
               .attr("id", "footer")
