@@ -9,12 +9,14 @@ body {
   border: 1px solid black;
   font-size: 12px;
 }
+
 #running th, td { padding: 0 1em 0.5ex;  }
 #running tr { background: #eee; }
 #running tr:nth-child(even) { background: #FFF; }
 #running tr:nth-child(odd) {background: #cccccc; }
 #running th.center, td.center { text-align: center; }
 #running th.num, td.num { text-align: right; }
+
 p { text-align: justify; }
 
 svg { background-color: #cccccc; }
@@ -23,8 +25,6 @@ svg { background-color: #cccccc; }
   font-size: 12px;
   text-align: justify;
 }
-
-#bar-chart-footer { text-align: center; }
 
 .button {
     background-color: crimson;
