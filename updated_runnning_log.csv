@@ -35,7 +35,7 @@ running,Poughkeepsie Running,6.32,601,44:19:00,155,167,170,194,7:00,4:05,447,432
 running,Poughkeepsie Running,8.86,861,1:02:10,160,179,168,190,7:01,5:45,710,703,1.37,,,,,
 treadmill_running,Treadmill Running,5.09,499,35:40:00,158,168,166,179,7:00,6:28,,,1.27,,,,,
 indoor_cycling,Indoor Cycling,0,311,24:56:00,148,157,,,,,,,0,,,,,
-indoor_cycling,Indoor Cycling,17.03,689,1:05:56,149,160,,,15.5,,,,0,91,152,,,
+indoor_cycling,Indoor Cycling,,689,1:05:56,149,160,,,15.5,,,,0,91,152,,,
 running,Poughkeepsie Running,4.39,434,29:38:00,162,174,169,178,6:45,5:43,371,373,1.41,,,,,
 running,Poughkeepsie Running,8.02,883,52:58:00,65,66,186,213,6:36,4:47,636,639,1.31,,,,,
 treadmill_running,Treadmill Running,1.35,133,10:05,146,155,166,176,7:28,6:51,,,1.26,,,,,
