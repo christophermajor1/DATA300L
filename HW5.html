@@ -93,22 +93,22 @@
             // max hr y-scale
             var yScaleMaxHR = d3.scaleLinear()
               .domain([0, d3.max(data, function(d) { return parseFloat(d["Max HR"]); })])
-              .range([h, padding]);
+              .range([h - padding, padding]);
 
             // avg hr y-scale
             var yScaleAvgHR = d3.scaleLinear()
               .domain([0, d3.max(data, function(d) { return parseFloat(d["Avg HR"]); })])
-              .range([h, padding]);
+              .range([h - padding, padding]);
 
             // max cadence y-scale
             var yScaleMaxCadence = d3.scaleLinear()
               .domain([0, d3.max(data, function(d) { return parseFloat(d["Max Cadence"]); })])
-              .range([h, padding]);
+              .range([h - padding, padding]);
 
             // total strokes y-scale
             var yScaleTotalStrokes = d3.scaleLinear()
               .domain([0, d3.max(data, function(d) { return parseFloat(d["Total Strokes"]); })])
-              .range([h, padding]);
+              .range([h - padding, padding]);
 
             // distance x-axis
             var xAxisDist = d3.axisTop()
