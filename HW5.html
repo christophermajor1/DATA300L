@@ -80,6 +80,11 @@
               .domain([0, d3.max(data, function(d) { return parseFloat(d["Distance"]); })])
               .range([padding, w - padding]);
 
+            // avg stroke rate x-scale
+            var xScaleAvgStrokeRate = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return parseFloat(d["Avg Stroke Rate"]); })])
+              .range([padding, w - padding]);
+
             // calorie y-scale
             var yScaleCal = d3.scaleLinear()
               .domain([0, d3.max(data, function(d) { return parseFloat(d["Calories"]); })])
@@ -95,14 +100,29 @@
               .domain([0, d3.max(data, function(d) { return parseFloat(d["Avg HR"]); })])
               .range([h, padding]);
 
-            // max cadence scale
+            // max cadence y-scale
             var yScaleMaxCadence = d3.scaleLinear()
               .domain([0, d3.max(data, function(d) { return parseFloat(d["Max Cadence"]); })])
+              .range([h, padding]);
+
+            // total strokes y-scale
+            var yScaleTotalStrokes = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return parseFloat(d["Total Strokes"]); })])
               .range([h, padding]);
 
             // distance x-axis
             var xAxisDist = d3.axisTop()
               .scale(xScaleDist)
+              .ticks(10);
+
+            // avg stroke rate x-axis
+            var xAxisAvgStrokeRate = d3.axisTop()
+              .scale(xScaleAvgStrokeRate)
+              .ticks(10);
+
+            // total strokes y-axis
+            var yAxisTotalStrokes = d3.axisRight()
+              .scale(yScaleTotalStrokes)
               .ticks(10);
 
             // calorie y-axis
@@ -162,10 +182,10 @@
             // append bar chart footer
             d3.select("body")
               .append("p")
-              .attr("class", "chart-footer");
+              .attr("id", "bar-chart-footer");
 
             // append calorie transition button
-            d3.select(".chart-footer")
+            d3.select("#bar-chart-footer")
               .append("button")
               .attr("class", "button")
               .on("click", function() {
@@ -200,7 +220,7 @@
               .html("Calories");
 
             // append max hr transition button
-            d3.select(".chart-footer")
+            d3.select("#bar-chart-footer")
               .append("button")
               .attr("class", "button")
               .on("click", function() {
@@ -235,7 +255,7 @@
               .html("Max HR");
 
             // append avg hr transition button
-            d3.select(".chart-footer")
+            d3.select("#bar-chart-footer")
               .append("button")
               .attr("class", "button")
               .on("click", function() {
@@ -270,7 +290,7 @@
               .html("Avg HR");
 
             // append max cadence transition button
-            d3.select(".chart-footer")
+            d3.select("#bar-chart-footer")
               .append("button")
               .attr("class", "button")
               .on("click", function() {
@@ -324,7 +344,8 @@
             // scatter plot headers
             d3.select("body")
               .append("h2")
-              .html("Scatter Plots")
+              .attr("id", "scatter-plot-header")
+              .html("Distance vs Calories")
 
             // scatter plot svg
             var svg2 = d3.select("body")
@@ -346,23 +367,134 @@
               .attr("r", "5")
               .attr("fill", "crimson");
 
-              //update scatter plot
-              
-          //Update all circles 
-          svg.selectAll("circle")
-             .data(data)
-             .transition()
-             .delay(1000)             
-             .duration(2000)
-             .attr("cx", function(d) {
-                return xScaleDist(d["Distance"]);
-              })                
-             .attr("cy", function(d) {
-                return yScaleAvgHR(d["Avg HR"]);
-             })
-             .attr("r", "5")
-             .attr("fill", "crimson");
-          
+            // append x-axis
+            svg2.append("g")
+              .attr("class", "x-axis")
+              .attr("transform", "translate(0," + (h - padding) + ")")
+              .call(xAxisDist);
+
+            // append y-axis
+            svg2.append("g")
+              .attr("class", "y-axis")
+              .attr("transform", "translate(" + padding + ",0)")
+              .call(yAxisCal);
+
+            // append scatter plot footer
+            d3.select("body")
+              .append("p")
+              .attr("id", "scatter-plot-footer");
+
+            // append distance vs calories transition button
+            d3.select("#scatter-plot-footer")
+              .append("button")
+              .attr("class", "button")
+              .on("click", function() {
+                d3.select("#scatter-plot-header")
+                  .html("Distacnce vs Calories")
+                  .transition();
+
+                // update scatter plot
+                svg2.selectAll("circle")
+                  .data(data)
+                  .transition()
+                  .duration(3000)
+                  .attr("cx", function(d) {
+                    return xScaleDist(d["Distance"]);
+                  })
+                  .attr("cy", function(d) {
+                    return yScaleCal(d["Calories"]);
+                  })
+                  .attr("r", "5")
+                  .attr("fill", "crimson");
+
+                // update x-axis
+                svg2.select(".x-axis")
+                  .transition()
+                  .duration(3000)
+                  .call(xAxisDist);
+
+                // update y-axis
+                svg2.select(".y-axis")
+                  .transition()
+                  .duration(3000)
+                  .call(yAxisCal);
+              })
+              .html("Distacnce vs Calories");
+
+            // append distance vs avg hr transition button
+            d3.select("#scatter-plot-footer")
+              .append("button")
+              .attr("class", "button")
+              .on("click", function() {
+                d3.select("#scatter-plot-header")
+                  .html("Distacnce vs Avg HR")
+                  .transition();
+
+                // update scatter plot
+                svg2.selectAll("circle")
+                  .data(data)
+                  .transition()
+                  .duration(3000)
+                  .attr("cx", function(d) {
+                    return xScaleDist(d["Distance"]);
+                  })
+                  .attr("cy", function(d) {
+                    return yScaleAvgHR(d["Avg HR"]);
+                  })
+                  .attr("r", "5")
+                  .attr("fill", "crimson");
+
+                // update x-axis
+                svg2.select(".x-axis")
+                  .transition()
+                  .duration(3000)
+                  .call(xAxisDist);
+
+                // update y-axis
+                svg2.select(".y-axis")
+                  .transition()
+                  .duration(3000)
+                  .call(yAxisAvgHR);
+              })
+              .html("Distacnce vs Avg HR");
+
+            // append avg stroke rate vs total strokes transition button
+            d3.select("#scatter-plot-footer")
+              .append("button")
+              .attr("class", "button")
+              .on("click", function() {
+                d3.select("#scatter-plot-header")
+                  .html("Avg Stroke Rate vs Total Strokes")
+                  .transition();
+
+                // update scatter plot
+                svg2.selectAll("circle")
+                  .data(data)
+                  .transition()
+                  .duration(3000)
+                  .attr("cx", function(d) {
+                    return xScaleAvgStrokeRate(d["Avg Stroke Rate"]);
+                  })
+                  .attr("cy", function(d) {
+                    return yScaleTotalStrokes(d["Total Strokes"]);
+                  })
+                  .attr("r", "5")
+                  .attr("fill", "crimson");
+
+                // update x-axis
+                svg2.select(".x-axis")
+                  .transition()
+                  .duration(3000)
+                  .call(xAxisAvgStrokeRate);
+
+                // update y-axis
+                svg2.select(".y-axis")
+                  .transition()
+                  .duration(3000)
+                  .call(yAxisTotalStrokes);
+              })
+              .html("Avg Stroke Rate vs Total Strokes");
+
             /*svg2.selectAll("text")
               .data(data)
               .enter()
@@ -379,23 +511,6 @@
               .attr("font-family", "verdana")
               .attr("font-size", "12px")
               .attr("fill", "black");*/
-
-            // append distance axis
-            svg2.append("g")
-              .attr("class", "axis")
-              .attr("transform", "translate(0," + (h - padding) + ")")
-              .call(xAxisDist);
-
-            // .append calorie axis
-            svg2.append("g")
-              .attr("class", "axis")
-              .attr("transform", "translate(" + padding + ",0)")
-              .call(yAxisCal);
-
-            // append scatter plot footer
-            d3.select("body")
-              .append("p")
-              .attr("class", "chart-footer");
 
             // append footer
             d3.select("body")
