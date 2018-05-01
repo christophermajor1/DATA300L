@@ -10,7 +10,7 @@ body {
   font-size: 12px;
 }
 
-#running th, td { padding: 0 1em 0.5ex;  }
+#running th, td { padding: 0 1em 0.5ex; }
 #running tr { background: #eee; }
 #running tr:nth-child(even) { background: #FFF; }
 #running tr:nth-child(odd) {background: #cccccc; }
@@ -27,18 +27,16 @@ svg { background-color: #cccccc; }
 }
 
 .button {
-    background-color: crimson;
-    border: none;
-    color: white;
-    padding: 15px 25px;
-    text-align: center;
-    font-size: 16px;
-    cursor: pointer;
-    margin-left: 2px;
+  background-color: crimson;
+  border: none;
+  color: white;
+  padding: 15px 25px;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: 2px;
 }
 
 .button:hover {
-    background-color: green;
+  background-color: green;
 }
-
-
