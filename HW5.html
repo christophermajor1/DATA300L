@@ -52,7 +52,7 @@
               .text(function(d) { return d; });
 
             // chart variables
-            var padding = 5;
+            var padding = 10;
             var w = 1377;
             var h = 500;
 
@@ -173,7 +173,7 @@
                 .attr("fill", "crimson");
                });
 
-            // append calorie axis
+            // append y-axis
             svg.append("g")
               .attr("class", "axis")
               .attr("transform", "translate(" + padding + "," + (padding * -1) + ")")
@@ -365,7 +365,18 @@
                 return yScaleCal(d["Calories"]);
               })
               .attr("r", "5")
-              .attr("fill", "crimson");
+              .attr("fill", "crimson")
+
+              // mouseover
+              .on("mouseover", function() {
+                d3.select(this)
+                .attr("fill", "darkblue");
+              })
+              // mouseout
+              .on("mouseout", function(d) {
+                d3.select(this)
+                .attr("fill", "crimson");
+               });
 
             // append x-axis
             svg2.append("g")
@@ -390,7 +401,7 @@
               .attr("class", "button")
               .on("click", function() {
                 d3.select("#scatter-plot-header")
-                  .html("Distacnce vs Calories")
+                  .html("Distance vs Calories")
                   .transition();
 
                 // update scatter plot
@@ -419,7 +430,7 @@
                   .duration(3000)
                   .call(yAxisCal);
               })
-              .html("Distacnce vs Calories");
+              .html("Distance vs Calories");
 
             // append distance vs avg hr transition button
             d3.select("#scatter-plot-footer")
