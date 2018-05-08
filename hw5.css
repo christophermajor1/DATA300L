@@ -41,7 +41,7 @@ svg { background-color: #cccccc; }
   background-color: green;
 }
 
-#tooltip {
+div.tooltip {
         position: absolute;
         width: 270px;
         height: auto;
@@ -56,11 +56,11 @@ svg { background-color: #cccccc; }
         pointer-events: none;
       }
       
-      #tooltip.hidden {
+      div.tooltip.hidden {
         display: none;
       }
       
-      #tooltip p {
+      div.tooltip p {
         margin: 0;
         font-family: sans-serif;
         font-size: 16px;

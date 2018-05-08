@@ -192,6 +192,11 @@
               .scale(yScaleMaxCadence)
               .ticks(10);
 
+            // Define the div for the tooltip
+            var div = d3.select("body").append("div") 
+             .attr("class", "tooltip")       
+             .style("opacity", 0);  
+
             // append barchart
             svg.selectAll("rect")
               .data(data)
@@ -419,9 +424,23 @@
               .attr("r", 3)
               .attr("fill", "crimson")
 
+               .on("mouseover", function(d) {   
+            div.transition()    
+                .duration(200)    
+                .style("opacity", .9); 
+
+            div .html((d["Distance"]) +" Miles" + "<br/>"  + d["Calories"] + " Calories")
+                .style("left", (d3.event.pageX) + "px")   
+                .style("top", (d3.event.pageY - 28) + "px");  
+            })          
+        .on("mouseout", function(d) {   
+            div.transition()    
+                .duration(500)    
+                .style("opacity", 0); 
+        });
 
               
-              // mouseover
+              /*// mouseover
               .on("mouseover", function() {
                 d3.select(this)
                 .attr("fill", "darkblue");
@@ -431,7 +450,7 @@
                 d3.select(this)
                 .attr("fill", "crimson");
                });
-              
+              */
             // append x-axis
             svg2.append("g")
               .attr("class", "x-axis")
