@@ -155,6 +155,11 @@
               .domain([0, d3.max(data, function(d) { return parseFloat(d["Total Strokes"]); })])
               .range([h - padding, padding]);
 
+            // avg pace y-scale
+            var yScaleAVGPace = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return parseFloat(d["AVG Pace"]); })])
+              .range([h - padding, padding]);
+
             // distance x-axis
             var xAxisDist = d3.axisTop()
               .scale(xScaleDist)
@@ -190,6 +195,11 @@
               .scale(yScaleMaxCadence)
               .ticks(10);
 
+            // avg pace y-axis
+            var yAxisAvgPace = d3.axisRight()
+              .scale(yScaleAVGPace)
+              .ticks(10);
+
             // Define the div for the tooltip
             var div = d3.select("body").append("div")
              .attr("class", "tooltip")
@@ -213,7 +223,7 @@
               })
               .attr("fill", "crimson")
 
-              // mouseover
+              /// mouseover
               .on("mouseover", function() {
                 d3.select(this)
                 .attr("fill", "darkblue");
@@ -222,7 +232,39 @@
               .on("mouseout", function(d) {
                 d3.select(this)
                 .attr("fill", "crimson");
+              })
+              .on("click", function() {
+                sortBars();
               });
+
+            //Define sort order flag
+            var sortOrder = false;
+      
+            //Define sort function
+            var sortBars = function() {
+
+           //Flip value of sortOrder
+           sortOrder = !sortOrder;
+
+            svg.selectAll("rect")
+             .sort(function(a, b) {
+                if (sortOrder) {
+                  return d3.ascending(a, b);
+                } else {
+                  return d3.descending(a, b);
+                }
+              })
+             .transition()
+             .delay(function(d, i) {
+               return i * 50;
+             })
+             .duration(1000)
+             .attr("x", function(d, i) {
+                return xScaleBar(i);
+             });
+
+            };      
+      
 
             // append y-axis
             svg.append("g")
