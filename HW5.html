@@ -10,6 +10,7 @@
      <div id="tooltip" class="hidden">
     </div>
     <script>
+    //svar parseDate = d3.time.format("%H:%M:%S").parse;
       d3.csv("updated_runnning_log.csv", function(data) {
             // main header
             d3.select("body")
@@ -238,7 +239,6 @@
               .on("click", function() {
                 sortBars();
               });
-
             //Define sort order flag
             var sortOrder = false;
       
@@ -471,7 +471,7 @@
                 .duration(200)    
                 .style("opacity", .9); 
 
-              div .html((d["Distance"]) +" Miles" + "<br/>"  + d["Calories"] + " Calories")
+              div .html((d["Distance"]) +" Miles" + "<br/>"  + d["Calories"] + " Calories" + "<br/>"  +  "location: " + d["Location"] + "<br/>"  + "Activty type: " + d["Activity Type"] +"<br/>"  + "Average heart rate: " + d["Avg HR"])
                 .style("left", (d3.event.pageX) + "px")   
                 .style("top", (d3.event.pageY - 28) + "px");  
                })          
