@@ -20,11 +20,23 @@
               .attr("id", "intro")
               .text("Christopher Major, and I are interested in two things, running and data. Together, we decided that running data found on my smart watch might be an interesting place to compare and visualize data. The data available for this study includes running history recorded on my smart watch almost every day from 2016 to present. This including variables such as…… location, activity type, time, average/best pace, average heart rate/maximum heart rate, average stride length, calories burned, elevation gained/ lost, average and maximum cadence, distance, etc. In the running community a wide range of athletes use Garmin technologies to obtain information to further their knowledge of their body and their overall training. Our objective is to make visualizations and conclusions based off of my running data in the hope other people could benefit from our visualization as well. Anyone with a Garmin product can log into their account and export the data they have accumulated to fill out our visualization. This makes our visualization compatible for various athletes worldwide. We hope to show how heart rate dictates your overall fitness level. This will be accomplished using charts to show data like distances run over time, the pace those runs were at, and the average heart rate. I expect our results to show that on average, running a similar pace in the beginning of your training will result in a higher heart rate than at the completion of your training. Other interesting things to visualize for users could be how your cadence and stride length are related, and how those would then relate to your pace. However, the relation between pace and heart rate is our main focus in the project. While making accurate conclusions based solely off my own personal data will be inaccurate due to a small sample size and other outside factors, I hope to make some general conclusions based off the data available to me through both my Garmin Vívoactive smartwatch and Garmin soft strap premium heart rate monitor through visualizations.");
 
-            var categories = new Set();
+            /*var categories = new Set();
             data.forEach(function (d) {
               categories.add(d["Activity Type"]);
             });
             console.log(categories);
+            function countCategories(allCategories, category) {
+              if (category in allCategories) {
+                allCategories[category]++;
+              }
+              else {
+                allCategories[category] = 1;
+              }
+              return allCategories;
+            }
+            var countedCategories = categories.forEach(countCategories);
+            console.log(countedCategories);*/
+
             //categories.forEach(function callback())
             /*categories.forEach(function(category) {
               // reduce is going to return the count of how many times category appears in data
@@ -179,6 +191,7 @@
               .data(data)
               .enter()
               .append("rect")
+              .filter(function(d) { return !isNaN(d["Calories"]) })
               .attr("x", function(d, i) {
                 return xScaleBar(i);
               })
@@ -200,7 +213,7 @@
               .on("mouseout", function(d) {
                 d3.select(this)
                 .attr("fill", "crimson");
-               });
+              });
 
             // append y-axis
             svg.append("g")
@@ -228,6 +241,7 @@
                   .data(data)
                   .transition()
                   .duration(3000)
+                  .filter(function(d) { return !isNaN(d["Calories"]) })
                   .attr("x", function(d, i) {
                     return xScaleBar(i);
                   })
@@ -263,6 +277,7 @@
                   .data(data)
                   .transition()
                   .duration(3000)
+                  .filter(function(d) { return !isNaN(d["Max HR"]) })
                   .attr("x", function(d, i) {
                     return xScaleBar(i);
                   })
@@ -298,6 +313,7 @@
                   .data(data)
                   .transition()
                   .duration(3000)
+                  .filter(function(d) { return !isNaN(d["Avg HR"]) })
                   .attr("x", function(d, i) {
                     return xScaleBar(i);
                   })
@@ -332,6 +348,7 @@
                   .data(data)
                   .transition()
                   .duration(3000)
+                  .filter(function(d) { return !isNaN(d["Max Cadence"]) })
                   .attr("x", function(d, i) {
                     return xScaleBar(i);
                   })
