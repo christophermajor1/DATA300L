@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Hw5 - Project Prototype</title>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <link rel="stylesheet" href="hw5.css">
+  </head>
+  <body>
+    <script>
+    //svar parseDate = d3.time.format("%H:%M:%S").parse;
+      d3.csv("updated_runnning_log.csv", function(data) {
+            d3.select("body")
+              .append("p")
+              .attr("id", "back-button")
+              .html("<a href='index.html'> Back </a>");
+
+            // table variables
+            var columns = Object.keys(data[0]),
+                table = d3.select("body").append("table").attr("id", "running"),
+                thead = table.append("thead"),
+                tbody = table.append("tbody");
+
+            // load dataset columns
+            thead.append("tr").selectAll("th")
+              .data(columns)
+              .enter()
+              .append("th")
+              .text(function(d) { return d; });
+
+            // load dataset rows
+            var rows = tbody.selectAll("tr")
+              .data(data)
+              .enter()
+              .append("tr");
+
+            // load dataset values
+            var cells = rows.selectAll("td")
+              .data(function(row) {
+                return d3.range(Object.keys(row).length).
+                map(function(column, i) {
+                  return row[columns[i]];
+                });
+              })
+              .enter()
+              .append("td")
+              .text(function(d) { return d; });
+          });
+    </script>
+  </body>
+</html>

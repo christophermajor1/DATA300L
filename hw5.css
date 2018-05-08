@@ -5,6 +5,8 @@ body {
 
 #intro { text-align: justify; }
 
+#back-button { text-align: justify; }
+
 #running {
   border: 1px solid black;
   font-size: 12px;
@@ -55,11 +57,11 @@ div.tooltip {
         box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
         pointer-events: none;
       }
-      
+
       div.tooltip.hidden {
         display: none;
       }
-      
+
       div.tooltip p {
         margin: 0;
         font-family: sans-serif;

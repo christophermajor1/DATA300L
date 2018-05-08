@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Data 300L Final Project</title>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <link rel="stylesheet" href="hw5.css">
+  </head>
+  <body>
+    <script>
+    //svar parseDate = d3.time.format("%H:%M:%S").parse;
+      d3.csv("updated_runnning_log.csv", function(data) {
+            // main header
+            d3.select("body")
+              .append("h1")
+              .text("Running Data")
+
+            // introductory paragraph
+            d3.select("body")
+              .append("p")
+              .attr("id", "intro")
+              .text("Christopher Major, and I are interested in two things, running and data. Together, we decided that running data found on my smart watch might be an interesting place to compare and visualize data. The data available for this study includes running history recorded on my smart watch almost every day from 2016 to present. This including variables such as…… location, activity type, time, average/best pace, average heart rate/maximum heart rate, average stride length, calories burned, elevation gained/ lost, average and maximum cadence, distance, etc. In the running community a wide range of athletes use Garmin technologies to obtain information to further their knowledge of their body and their overall training. Our objective is to make visualizations and conclusions based off of my running data in the hope other people could benefit from our visualization as well. Anyone with a Garmin product can log into their account and export the data they have accumulated to fill out our visualization. This makes our visualization compatible for various athletes worldwide. We hope to show how heart rate dictates your overall fitness level. This will be accomplished using charts to show data like distances run over time, the pace those runs were at, and the average heart rate. I expect our results to show that on average, running a similar pace in the beginning of your training will result in a higher heart rate than at the completion of your training. Other interesting things to visualize for users could be how your cadence and stride length are related, and how those would then relate to your pace. However, the relation between pace and heart rate is our main focus in the project. While making accurate conclusions based solely off my own personal data will be inaccurate due to a small sample size and other outside factors, I hope to make some general conclusions based off the data available to me through both my Garmin Vívoactive smartwatch and Garmin soft strap premium heart rate monitor through visualizations.");
+
+            var categories = new Set();
+            data.forEach(function (d) {
+              categories.add(d["Activity Type"]);
+            });
+            console.log(categories);
+
+            // before the next forEach, create a variable to hold the categoryCounts
+            var countedCategory = [];
+            categories.forEach(function(category) {
+              // reduce is going to return the count of how many times category appears in data
+              console.log(category);
+              data.reduce(function (count, d) { // first arg is the current count, not a category
+                if (category == d["Activity Type"]) {
+                  countedCategory.push(d["Activity Type"]);
+                }
+                else {
+                  return;
+                }
+              }, 0); // reduce needs a second argument, which is the starting value for whatever you are computing
+              // TODO once you have the count for this category, then you should add it to some list of categoryCounts
+            });
+            //console.log(countedCategory);
+            var count = countedCategory.reduce(function(allCategories, category) {
+              if (category in allCategories) {
+                allCategories[category]++;
+              }
+              else {
+                allCategories[category] = 1;
+              }
+              return allCategories;
+            }, []);
+            console.log(count);
+            var outerRadius = 300 / 2;
+      			var innerRadius = 300 / 3;
+            var arc = d3.arc()
+              .innerRadius(innerRadius)
+              .outerRadius(outerRadius);
+
+            var pie = d3.pie();
+
+            //Easy colors accessible via a 10-step ordinal scale
+            var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+            //Create SVG element
+            var svg3 = d3.select("body")
+              .append("svg")
+              .attr("width", "300")
+              .attr("height", "300");
+
+            //Set up groups
+            var arcs = svg3.selectAll("g.arc")
+              .data(pie(count))
+              .enter()
+              .append("g")
+              .attr("class", "arc")
+              .attr("transform", "translate(" + outerRadius + "," + outerRadius + ")");
+
+            //Draw arc paths
+            arcs.append("path")
+              .attr("fill", function(d, i) {
+                return color(i);
+              })
+              .attr("d", arc);
+
+            //Labels
+            arcs.append("text")
+              .attr("transform", function(d) {
+                return "translate(" + arc.centroid(d) + ")";
+              })
+              .attr("text-anchor", "middle")
+              .text(function(d) {
+                return d["Activity Type"];
+              });
+
+            // chart variables
+            var padding = 10,
+                w = 1377,
+                h = 500;
+
+            // barchart headers
+            d3.select("body")
+              .append("h2")
+              .attr("id", "bar-chart-header")
+              .html("Calories");
+
+            // barchart svg
+            var svg = d3.select("body")
+              .append("svg")
+              .attr("class", "bar-chart")
+              .attr("width", w)
+              .attr("height", h);
+
+            // barchart x-scale
+            var xScaleBar = d3.scaleBand()
+              .domain(d3.range(data.length))
+              .rangeRound([0, w])
+              .paddingInner(0.5);
+
+            // distance x-scale
+            var xScaleDist = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return parseFloat(d["Distance"]); })])
+              .range([padding, w - padding]);
+
+            // avg stroke rate x-scale
+            var xScaleAvgStrokeRate = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return parseFloat(d["Avg Stroke Rate"]); })])
+              .range([padding, w - padding]);
+
+            // calorie y-scale
+            var yScaleCal = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return parseFloat(d["Calories"]); })])
+              .range([h, padding]);
+
+            // max hr y-scale
+            var yScaleMaxHR = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return parseFloat(d["Max HR"]); })])
+              .range([h - padding, padding]);
+
+            // avg hr y-scale
+            var yScaleAvgHR = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return parseFloat(d["Avg HR"]); })])
+              .range([h - padding, padding]);
+
+            // max cadence y-scale
+            var yScaleMaxCadence = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return parseFloat(d["Max Cadence"]); })])
+              .range([h - padding, padding]);
+
+            // total strokes y-scale
+            var yScaleTotalStrokes = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return parseFloat(d["Total Strokes"]); })])
+              .range([h - padding, padding]);
+
+            // avg pace y-scale
+            var yScaleAVGPace = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return parseFloat(d["AVG Pace"]); })])
+              .range([h - padding, padding]);
+
+            // distance x-axis
+            var xAxisDist = d3.axisTop()
+              .scale(xScaleDist)
+              .ticks(10);
+
+            // avg stroke rate x-axis
+            var xAxisAvgStrokeRate = d3.axisTop()
+              .scale(xScaleAvgStrokeRate)
+              .ticks(10);
+
+            // total strokes y-axis
+            var yAxisTotalStrokes = d3.axisRight()
+              .scale(yScaleTotalStrokes)
+              .ticks(10);
+
+            // calorie y-axis
+            var yAxisCal = d3.axisRight()
+              .scale(yScaleCal)
+              .ticks(10);
+
+            // max hr y-axis
+            var yAxisMaxHR = d3.axisRight()
+              .scale(yScaleMaxHR)
+              .ticks(10);
+
+            // avg hr y-axis
+            var yAxisAvgHR = d3.axisRight()
+              .scale(yScaleAvgHR)
+              .ticks(10);
+
+            // max cadence y-axis
+            var yAxisMaxCadence = d3.axisRight()
+              .scale(yScaleMaxCadence)
+              .ticks(10);
+
+            // avg pace y-axis
+            var yAxisAvgPace = d3.axisRight()
+              .scale(yScaleAVGPace)
+              .ticks(10);
+
+            // Define the div for the tooltip
+            var div = d3.select("body").append("div")
+             .attr("class", "tooltip")
+             .style("opacity", 0);
+
+            // append barchart
+            svg.selectAll("rect")
+              .data(data)
+              .enter()
+              .append("rect")
+              .filter(function(d) { return !isNaN(d["Calories"]) })
+              .attr("x", function(d, i) {
+                return xScaleBar(i);
+              })
+              .attr("y", function(d) {
+                return yScaleCal(d["Calories"]) - padding;
+              })
+              .attr("width", xScaleBar.bandwidth())
+              .attr("height", function(d) {
+                return h - yScaleCal(d["Calories"]);
+              })
+              .attr("fill", "crimson")
+
+              /// mouseover
+              .on("mouseover", function() {
+                d3.select(this)
+                .attr("fill", "darkblue");
+              })
+              // mouseout
+              .on("mouseout", function(d) {
+                d3.select(this)
+                .attr("fill", "crimson");
+              })
+              .on("click", function() {
+                sortBars();
+              });
+            //Define sort order flag
+            var sortOrder = false;
+
+            //Define sort function
+            var sortBars = function() {
+
+           //Flip value of sortOrder
+           sortOrder = !sortOrder;
+
+            svg.selectAll("rect")
+             .sort(function(a, b) {
+                if (sortOrder) {
+                  return d3.ascending(a, b);
+                } else {
+                  return d3.descending(a, b);
+                }
+              })
+             .transition()
+             .delay(function(d, i) {
+               return i * 50;
+             })
+             .duration(1000)
+             .attr("x", function(d, i) {
+                return xScaleBar(i);
+             });
+
+            };
+
+
+            // append y-axis
+            svg.append("g")
+              .attr("class", "axis")
+              .attr("transform", "translate(" + padding + "," + (padding * -1) + ")")
+              .call(yAxisCal);
+
+            // append bar chart footer
+            d3.select("body")
+              .append("p")
+              .attr("id", "bar-chart-footer");
+
+            // append calorie transition button
+            d3.select("#bar-chart-footer")
+              .append("button")
+              .attr("class", "button")
+              .on("click", function() {
+                // update header
+                d3.select("#bar-chart-header")
+                  .html("Calories")
+                  .transition();
+
+                // update barchart
+                svg.selectAll("rect")
+                  .data(data)
+                  .transition()
+                  .duration(3000)
+                  .filter(function(d) { return !isNaN(parseInt(d["Calories"])) })
+                  .attr("x", function(d, i) {
+                    return xScaleBar(i);
+                  })
+                  .attr("y", function(d) {
+                    return yScaleCal(d["Calories"]) - padding;
+                  })
+                  .attr("width", xScaleBar.bandwidth())
+                  .attr("height", function(d) {
+                    return h - yScaleCal(d["Calories"]);
+                  })
+                  .attr("fill", "crimson");
+
+                // update axis
+                svg.select(".axis")
+                  .transition()
+                  .duration(3000)
+                  .call(yAxisCal);
+              })
+              .html("Calories");
+
+            // append max hr transition button
+            d3.select("#bar-chart-footer")
+              .append("button")
+              .attr("class", "button")
+              .on("click", function() {
+                // update header
+                d3.select("#bar-chart-header")
+                  .html("Max HR")
+                  .transition();
+
+                // update barchart
+                svg.selectAll("rect")
+                  .data(data)
+                  .transition()
+                  .duration(3000)
+                  .filter(function(d) { return !isNaN(parseInt(d["Max HR"])) })
+                  .attr("x", function(d, i) {
+                    return xScaleBar(i);
+                  })
+                  .attr("y", function(d) {
+                    return yScaleMaxHR(d["Max HR"]) - padding;
+                  })
+                  .attr("width", xScaleBar.bandwidth())
+                  .attr("height", function(d) {
+                    return h - yScaleMaxHR(d["Max HR"]);
+                  })
+                  .attr("fill", "orange");
+
+                // update axis
+                svg.select(".axis")
+                  .transition()
+                  .duration(3000)
+                  .call(yAxisMaxHR);
+              })
+              .html("Max HR");
+
+            // append avg hr transition button
+            d3.select("#bar-chart-footer")
+              .append("button")
+              .attr("class", "button")
+              .on("click", function() {
+                // update header
+                d3.select("#bar-chart-header")
+                  .html("Avg HR")
+                  .transition();
+
+                // update barchart
+                svg.selectAll("rect")
+                  .data(data)
+                  .transition()
+                  .duration(3000)
+                  .filter(function(d) { return !isNaN(parseInt(d["Avg HR"])); /* convert to Int first, then check NaN */})
+                  .attr("x", function(d, i) {
+                    return xScaleBar(i);
+                  })
+                  .attr("y", function(d) {
+                    return yScaleAvgHR(d["Avg HR"]) - padding;
+                  })
+                  .attr("width", xScaleBar.bandwidth())
+                  .attr("height", function(d) {
+                    return h - yScaleAvgHR(d["Avg HR"]);
+                  })
+                  .attr("fill", "blue");
+
+                // update axis
+                svg.select(".axis")
+                  .transition()
+                  .duration(3000)
+                  .call(yAxisAvgHR);
+              })
+              .html("Avg HR");
+
+            // append max cadence transition button
+            d3.select("#bar-chart-footer")
+              .append("button")
+              .attr("class", "button")
+              .on("click", function() {
+                d3.select("#bar-chart-header")
+                  .html("Max Cadence")
+                  .transition();
+
+                // update barchart
+                svg.selectAll("rect")
+                  .data(data)
+                  .transition()
+                  .duration(3000)
+                  .filter(function(d) { return !isNaN(parseInt(d["Max Cadence"])) })
+                  .attr("x", function(d, i) {
+                    return xScaleBar(i);
+                  })
+                  .attr("y", function(d) {
+                    return yScaleMaxCadence(d["Max Cadence"]) - padding;
+                  })
+                  .attr("width", xScaleBar.bandwidth())
+                  .attr("height", function(d) {
+                    return h - yScaleMaxCadence(d["Max Cadence"]);
+                  })
+                  .attr("fill", "gray");
+
+                // update axis
+                svg.select(".axis")
+                  .transition()
+                  .duration(3000)
+                  .call(yAxisMaxCadence);
+              })
+              .html("Max Cadence");
+
+            // scatter plot headers
+            d3.select("body")
+              .append("h2")
+              .attr("id", "scatter-plot-header")
+              .html("Distance vs Calories")
+
+            // scatter plot svg
+            var svg2 = d3.select("body")
+              .append("svg")
+              .attr("width", w)
+              .attr("height", h);
+
+            // append scatter plot
+            svg2.selectAll("circle")
+              .data(data)
+              .enter()
+              .append("circle")
+              .attr("cx", function(d) {
+                return xScaleDist(d["Distance"]);
+              })
+              .attr("cy", function(d) {
+                return yScaleCal(d["Calories"]);
+              })
+              .attr("r", 3)
+              .attr("fill", "crimson")
+
+              .on("mouseover", function(d) {
+                div.transition()
+                .duration(200)
+                .style("opacity", .9);
+
+              div .html((d["Distance"]) +" Miles" + "<br/>"  + d["Calories"] + " Calories" + "<br/>"  +  "location: " + d["Location"] + "<br/>"  + "Activty type: " + d["Activity Type"] +"<br/>"  + "Average heart rate: " + d["Avg HR"])
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+               })
+             .on("mouseout", function(d) {
+              div.transition()
+                .duration(500)
+                .style("opacity", 0);
+             });
+
+            // append x-axis
+            svg2.append("g")
+              .attr("class", "x-axis")
+              .attr("transform", "translate(0," + (h - padding) + ")")
+              .call(xAxisDist);
+
+            // append y-axis
+            svg2.append("g")
+              .attr("class", "y-axis")
+              .attr("transform", "translate(" + padding + ",0)")
+              .call(yAxisCal);
+
+            // append scatter plot footer
+            d3.select("body")
+              .append("p")
+              .attr("id", "scatter-plot-footer");
+
+            // append distance vs calories transition button
+            d3.select("#scatter-plot-footer")
+              .append("button")
+              .attr("class", "button")
+              .on("click", function() {
+                d3.select("#scatter-plot-header")
+                  .html("Distance vs Calories")
+                  .transition();
+
+                // update scatter plot
+                svg2.selectAll("circle")
+                  .data(data)
+                  .transition()
+                  .duration(3000)
+                  .attr("cx", function(d) {
+                    return xScaleDist(d["Distance"]);
+                  })
+                  .attr("cy", function(d) {
+                    return yScaleCal(d["Calories"]);
+                  })
+                  .attr("r", 3)
+                  .attr("fill", "crimson");
+
+                // update x-axis
+                svg2.select(".x-axis")
+                  .transition()
+                  .duration(3000)
+                  .call(xAxisDist);
+
+                // update y-axis
+                svg2.select(".y-axis")
+                  .transition()
+                  .duration(3000)
+                  .call(yAxisCal);
+              })
+              .html("Distance vs Calories");
+
+            // append distance vs avg hr transition button
+            d3.select("#scatter-plot-footer")
+              .append("button")
+              .attr("class", "button")
+              .on("click", function() {
+                d3.select("#scatter-plot-header")
+                  .html("Distacnce vs Avg HR")
+                  .transition();
+
+                // update scatter plot
+                svg2.selectAll("circle")
+                  .data(data)
+                  .transition()
+                  .duration(3000)
+                  .attr("cx", function(d) {
+                    return xScaleDist(d["Distance"]);
+                  })
+                  .attr("cy", function(d) {
+                    return yScaleAvgHR(d["Avg HR"]);
+                  })
+                  .attr("r", 3)
+                  .attr("fill", "crimson");
+
+                // update x-axis
+                svg2.select(".x-axis")
+                  .transition()
+                  .duration(3000)
+                  .call(xAxisDist);
+
+                // update y-axis
+                svg2.select(".y-axis")
+                  .transition()
+                  .duration(3000)
+                  .call(yAxisAvgHR);
+              })
+              .html("Distacnce vs Avg HR");
+
+            // append avg stroke rate vs total strokes transition button
+            d3.select("#scatter-plot-footer")
+              .append("button")
+              .attr("class", "button")
+              .on("click", function() {
+                d3.select("#scatter-plot-header")
+                  .html("Avg Stroke Rate vs Total Strokes")
+                  .transition();
+
+                // update scatter plot
+                svg2.selectAll("circle")
+                  .data(data)
+                  .transition()
+                  .duration(3000)
+                  .attr("cx", function(d) {
+                    return xScaleAvgStrokeRate(d["Avg Stroke Rate"]);
+                  })
+                  .attr("cy", function(d) {
+                    return yScaleTotalStrokes(d["Total Strokes"]);
+                  })
+                  .attr("r", 3)
+                  .attr("fill", "crimson");
+
+                // update x-axis
+                svg2.select(".x-axis")
+                  .transition()
+                  .duration(3000)
+                  .call(xAxisAvgStrokeRate);
+
+                // update y-axis
+                svg2.select(".y-axis")
+                  .transition()
+                  .duration(3000)
+                  .call(yAxisTotalStrokes);
+              })
+              .html("Avg Stroke Rate vs Total Strokes");
+
+            // append footer
+            d3.select("body")
+              .append("p")
+              .attr("id", "footer")
+              .html("DATA 300L - 111 <br> Andrew Burns, Christopher Major <br> 04/25/2018 <br> <a href='updated_runnning_log.html' target='_blank'> Dataset </a>");
+          });
+    </script>
+  </body>
+</html>
