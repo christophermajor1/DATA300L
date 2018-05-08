@@ -224,7 +224,39 @@
               .on("mouseout", function(d) {
                 d3.select(this)
                 .attr("fill", "crimson");
+              })
+              .on("click", function() {
+                sortBars();
               });
+
+            //Define sort order flag
+            var sortOrder = false;
+      
+            //Define sort function
+            var sortBars = function() {
+
+           //Flip value of sortOrder
+           sortOrder = !sortOrder;
+
+          svg.selectAll("rect")
+           .sort(function(a, b) {
+              if (sortOrder) {
+                return d3.ascending(a, b);
+              } else {
+                return d3.descending(a, b);
+              }
+            })
+           .transition()
+           .delay(function(d, i) {
+             return i * 50;
+           })
+           .duration(1000)
+           .attr("x", function(d, i) {
+              return xScaleBar(i);
+           });
+
+          };      
+      
 
             // append y-axis
             svg.append("g")
