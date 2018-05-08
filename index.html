@@ -121,42 +121,42 @@
 
             // distance x-scale
             var xScaleDist = d3.scaleLinear()
-              .domain([0, d3.max(data, function(d) { return parseFloat(d["Distance"]); })])
+              .domain([0, d3.max(data, function(d) { return parseInt(d["Distance"]); })])
               .range([padding, w - padding]);
 
             // avg stroke rate x-scale
             var xScaleAvgStrokeRate = d3.scaleLinear()
-              .domain([0, d3.max(data, function(d) { return parseFloat(d["Avg Stroke Rate"]); })])
+              .domain([0, d3.max(data, function(d) { return parseInt(d["Avg Stroke Rate"]); })])
               .range([padding, w - padding]);
 
             // calorie y-scale
             var yScaleCal = d3.scaleLinear()
-              .domain([0, d3.max(data, function(d) { return parseFloat(d["Calories"]); })])
+              .domain([0, d3.max(data, function(d) { return parseInt(d["Calories"]); })])
               .range([h, padding]);
 
             // max hr y-scale
             var yScaleMaxHR = d3.scaleLinear()
-              .domain([0, d3.max(data, function(d) { return parseFloat(d["Max HR"]); })])
+              .domain([0, d3.max(data, function(d) { return parseInt(d["Max HR"]); })])
               .range([h - padding, padding]);
 
             // avg hr y-scale
             var yScaleAvgHR = d3.scaleLinear()
-              .domain([0, d3.max(data, function(d) { return parseFloat(d["Avg HR"]); })])
+              .domain([0, d3.max(data, function(d) { return parseInt(d["Avg HR"]); })])
               .range([h - padding, padding]);
 
             // max cadence y-scale
             var yScaleMaxCadence = d3.scaleLinear()
-              .domain([0, d3.max(data, function(d) { return parseFloat(d["Max Cadence"]); })])
+              .domain([0, d3.max(data, function(d) { return parseInt(d["Max Cadence"]); })])
               .range([h - padding, padding]);
 
             // total strokes y-scale
             var yScaleTotalStrokes = d3.scaleLinear()
-              .domain([0, d3.max(data, function(d) { return parseFloat(d["Total Strokes"]); })])
+              .domain([0, d3.max(data, function(d) { return parseInt(d["Total Strokes"]); })])
               .range([h - padding, padding]);
 
             // avg pace y-scale
             var yScaleAVGPace = d3.scaleLinear()
-              .domain([0, d3.max(data, function(d) { return parseFloat(d["AVG Pace"]); })])
+              .domain([0, d3.max(data, function(d) { return parseInt(d["AVG Pace"]); })])
               .range([h - padding, padding]);
 
             // distance x-axis
@@ -209,7 +209,7 @@
               .data(data)
               .enter()
               .append("rect")
-              .filter(function(d) { return !isNaN(d["Calories"]) })
+              .filter(function(d) { return !isNaN(parseInt(d["Calories"])) })
               .attr("x", function(d, i) {
                 return xScaleBar(i);
               })
