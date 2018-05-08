@@ -393,7 +393,7 @@
               .attr("cy", function(d) {
                 return yScaleCal(d["Calories"]);
               })
-              .attr("r", function(d) { return d == null ? 0 : 3; })
+              .attr("r", 3)
               .attr("fill", "crimson")
 
               // mouseover
@@ -444,7 +444,7 @@
                   .attr("cy", function(d) {
                     return yScaleCal(d["Calories"]);
                   })
-                  .attr("r", function(d) { return d == null ? 0 : 3; })
+                  .attr("r", 3)
                   .attr("fill", "crimson");
 
                 // update x-axis
@@ -481,7 +481,7 @@
                   .attr("cy", function(d) {
                     return yScaleAvgHR(d["Avg HR"]);
                   })
-                  .attr("r", function(d) { return d == null ? 0 : 3; })
+                  .attr("r", 3)
                   .attr("fill", "crimson");
 
                 // update x-axis
@@ -518,7 +518,7 @@
                   .attr("cy", function(d) {
                     return yScaleTotalStrokes(d["Total Strokes"]);
                   })
-                  .attr("r", function(d) { return d == null ? 0 : 3; })
+                  .attr("r", 3)
                   .attr("fill", "crimson");
 
                 // update x-axis
