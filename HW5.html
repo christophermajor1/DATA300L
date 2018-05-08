@@ -247,7 +247,7 @@
                   .data(data)
                   .transition()
                   .duration(3000)
-                  .filter(function(d) { return !isNaN(d["Calories"]) })
+                  .filter(function(d) { return !isNaN(parseInt(d["Calories"])) })
                   .attr("x", function(d, i) {
                     return xScaleBar(i);
                   })
@@ -283,7 +283,7 @@
                   .data(data)
                   .transition()
                   .duration(3000)
-                  .filter(function(d) { return !isNaN(d["Max HR"]) })
+                  .filter(function(d) { return !isNaN(parseInt(d["Max HR"])) })
                   .attr("x", function(d, i) {
                     return xScaleBar(i);
                   })
@@ -319,7 +319,7 @@
                   .data(data)
                   .transition()
                   .duration(3000)
-                  .filter(function(d) { return !isNaN(d["Avg HR"]); /* convert to Int first, then check NaN */})
+                  .filter(function(d) { return !isNaN(parseInt(d["Avg HR"])); /* convert to Int first, then check NaN */})
                   .attr("x", function(d, i) {
                     return xScaleBar(i);
                   })
@@ -330,7 +330,7 @@
                   .attr("height", function(d) {
                     return h - yScaleAvgHR(d["Avg HR"]);
                   })
-                  .attr("fill", "brown");
+                  .attr("fill", "blue");
 
                 // update axis
                 svg.select(".axis")
@@ -354,7 +354,7 @@
                   .data(data)
                   .transition()
                   .duration(3000)
-                  .filter(function(d) { return !isNaN(d["Max Cadence"]) })
+                  .filter(function(d) { return !isNaN(parseInt(d["Max Cadence"])) })
                   .attr("x", function(d, i) {
                     return xScaleBar(i);
                   })
