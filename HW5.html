@@ -28,34 +28,32 @@
             });
             console.log(categories);
 
-            /*
-            function countCategories(category) { // must have just one argument, representing the next category
-              //if (category in allCategories) { // no need to check this because category MUST be one of the categories
+            // before the next forEach, create a variable to hold the categoryCounts
+            var countedCategory = [];
+            categories.forEach(function(category) {
+              // reduce is going to return the count of how many times category appears in data
+              console.log(category);
+              data.reduce(function (count, d) { // first arg is the current count, not a category
+                if (category == d["Activity Type"]) {
+                  countedCategory.push(d["Activity Type"]);
+                }
+                else {
+                  return;
+                }
+              }, 0); // reduce needs a second argument, which is the starting value for whatever you are computing
+              // TODO once you have the count for this category, then you should add it to some list of categoryCounts
+            });
+            //console.log(countedCategory);
+            var count = countedCategory.reduce(function(allCategories, category) {
+              if (category in allCategories) {
                 allCategories[category]++;
               }
               else {
                 allCategories[category] = 1;
               }
               return allCategories;
-            }
-            var countedCategories = categories.forEach(countCategories);
-            console.log(countedCategories);*/
-
-            // before the next forEach, create a variable to hold the categoryCounts
-
-            categories.forEach(function(category) {
-              // reduce is going to return the count of how many times category appears in data
-              var countedCategory = data.reduce(function (count, d) { // first arg is the current count, not a category
-                if (category == d["Activity type"]) {
-                  return count + 1 ;
-                } // TODO else the count doesn't change
-
-                //return allCategories;
-              }, 0);  // reduce needs a second argument, which is the starting value for whatever you are computing
-              // TODO once you have the count for this category, then you should add it to some list of categoryCounts
-
-            });
-            //console.log(countedCategories);
+            }, []);
+            console.log(count);
             var outerRadius = 300 / 2;
       			var innerRadius = 300 / 3;
             var arc = d3.arc()
@@ -75,7 +73,7 @@
 
             //Set up groups
             var arcs = svg3.selectAll("g.arc")
-              .data(pie(data))
+              .data(pie(count))
               .enter()
               .append("g")
               .attr("class", "arc")
@@ -193,9 +191,9 @@
               .ticks(10);
 
             // Define the div for the tooltip
-            var div = d3.select("body").append("div") 
-             .attr("class", "tooltip")       
-             .style("opacity", 0);  
+            var div = d3.select("body").append("div")
+             .attr("class", "tooltip")
+             .style("opacity", 0);
 
             // append barchart
             svg.selectAll("rect")
@@ -424,22 +422,22 @@
               .attr("r", 3)
               .attr("fill", "crimson")
 
-              .on("mouseover", function(d) {   
-                div.transition()    
-                .duration(200)    
-                .style("opacity", .9); 
+              .on("mouseover", function(d) {
+                div.transition()
+                .duration(200)
+                .style("opacity", .9);
 
               div .html((d["Distance"]) +" Miles" + "<br/>"  + d["Calories"] + " Calories")
-                .style("left", (d3.event.pageX) + "px")   
-                .style("top", (d3.event.pageY - 28) + "px");  
-               })          
-             .on("mouseout", function(d) {   
-              div.transition()    
-                .duration(500)    
-                .style("opacity", 0); 
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+               })
+             .on("mouseout", function(d) {
+              div.transition()
+                .duration(500)
+                .style("opacity", 0);
              });
 
-              
+
               /*// mouseover
               .on("mouseover", function() {
                 d3.select(this)
@@ -579,7 +577,7 @@
               })
               .html("Avg Stroke Rate vs Total Strokes");
 
-          
+
             /*svg2.selectAll("text")
               .data(data)
               .enter()
