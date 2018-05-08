@@ -239,7 +239,7 @@
               });
             //Define sort order flag
             var sortOrder = false;
-      
+
             //Define sort function
             var sortBars = function() {
 
@@ -263,8 +263,8 @@
                 return xScaleBar(i);
              });
 
-            };      
-      
+            };
+
 
             // append y-axis
             svg.append("g")
@@ -420,24 +420,6 @@
               })
               .html("Max Cadence");
 
-            /*svg.selectAll("text")
-              .data(data)
-              .enter()
-              .append("text")
-              .text(function(d) {
-                return d["Calories"];
-              })
-              .attr("text-anchor", "middle")
-              .attr("x", function(d, i) {
-                return xScaleBar(i);
-              })
-              .attr("y", function(d) {
-                return yScaleCal(d["Calories"]) - 10;
-              })
-              .attr("font-family", "verdana")
-              .attr("font-size", "12px")
-              .attr("fill", "white");*/
-
             // scatter plot headers
             d3.select("body")
               .append("h2")
@@ -470,27 +452,15 @@
                 .style("opacity", .9);
 
               div .html((d["Distance"]) +" Miles" + "<br/>"  + d["Calories"] + " Calories" + "<br/>"  +  "location: " + d["Location"] + "<br/>"  + "Activty type: " + d["Activity Type"] +"<br/>"  + "Average heart rate: " + d["Avg HR"])
-                .style("left", (d3.event.pageX) + "px")   
-                .style("top", (d3.event.pageY - 28) + "px");  
-               })          
-             .on("mouseout", function(d) {   
-              div.transition()    
-                .duration(500)    
-                .style("opacity", 0); 
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+               })
+             .on("mouseout", function(d) {
+              div.transition()
+                .duration(500)
+                .style("opacity", 0);
              });
 
-
-              /*// mouseover
-              .on("mouseover", function() {
-                d3.select(this)
-                .attr("fill", "darkblue");
-              })
-              // mouseout
-              .on("mouseout", function(d) {
-                d3.select(this)
-                .attr("fill", "crimson");
-               });
-              */
             // append x-axis
             svg2.append("g")
               .attr("class", "x-axis")
@@ -618,24 +588,6 @@
                   .call(yAxisTotalStrokes);
               })
               .html("Avg Stroke Rate vs Total Strokes");
-
-
-            /*svg2.selectAll("text")
-              .data(data)
-              .enter()
-              .append("text")
-              .text(function(d) {
-                return d["Distance"] + "," + d["Calories"];
-              })
-              .attr("x", function(d) {
-                return xScalePlot(d["Distance"]);
-              })
-              .attr("y", function(d) {
-                return yScalePlot(d["Calories"]);
-              })
-              .attr("font-family", "verdana")
-              .attr("font-size", "12px")
-              .attr("fill", "black");*/
 
             // table variables
             var columns = Object.keys(data[0]),
