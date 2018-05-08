@@ -209,7 +209,7 @@
               .data(data)
               .enter()
               .append("rect")
-              .filter(function(d) { return !isNaN(d["Calories"]) })
+              .filter(function(d) { return !isNaN(parseInt(d["Calories"])) })
               .attr("x", function(d, i) {
                 return xScaleBar(i);
               })
