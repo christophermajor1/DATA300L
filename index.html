@@ -104,7 +104,7 @@
             d3.select("body")
               .append("h2")
               .attr("id", "bar-chart-header")
-              .html("Calories");
+              .html("Max HR");
 
             // barchart svg
             var svg = d3.select("body")
@@ -209,16 +209,16 @@
               .data(data)
               .enter()
               .append("rect")
-              .filter(function(d) { return !isNaN(parseInt(d["Calories"])) })
+              .filter(function(d) { return !isNaN(parseInt(d["Max HR"])) })
               .attr("x", function(d, i) {
                 return xScaleBar(i);
               })
               .attr("y", function(d) {
-                return yScaleCal(d["Calories"]) - padding;
+                return yScaleMaxHR(d["Max HR"]) - padding;
               })
               .attr("width", xScaleBar.bandwidth())
               .attr("height", function(d) {
-                return h - yScaleCal(d["Calories"]);
+                return h - yScaleMaxHR(d["Max HR"]);
               })
               .attr("fill", "crimson")
 
@@ -241,34 +241,33 @@
             //Define sort function
             var sortBars = function() {
 
-           //Flip value of sortOrder
-           sortOrder = !sortOrder;
+            //Flip value of sortOrder
+            sortOrder = !sortOrder;
 
             svg.selectAll("rect")
-             .sort(function(a, b) {
+              .sort(function(a, b) {
                 if (sortOrder) {
                   return d3.ascending(a, b);
-                } else {
+                }
+                else {
                   return d3.descending(a, b);
                 }
               })
-             .transition()
-             .delay(function(d, i) {
-               return i * 50;
-             })
-             .duration(1000)
-             .attr("x", function(d, i) {
+              .transition()
+              .delay(function(d, i) {
+                return i * 50;
+              })
+              .duration(1000)
+              .attr("x", function(d, i) {
                 return xScaleBar(i);
-             });
-
+              });
             };
-
 
             // append y-axis
             svg.append("g")
               .attr("class", "axis")
               .attr("transform", "translate(" + padding + "," + (padding * -1) + ")")
-              .call(yAxisCal);
+              .call(yAxisMaxHR);
 
             // append bar chart footer
             d3.select("body")
