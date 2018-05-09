@@ -1,9 +1,19 @@
 body {
+  background-image: url("running.jpg");
   text-align: center;
   font-family: verdana;
 }
 
-#intro { text-align: justify; }
+#container {
+  border: 1px solid black;
+  background-color: #cccccc;
+  opacity: 0.9;
+}
+
+#intro {
+  background: #cccccc;
+  text-align: justify;
+}
 
 #running {
   border: 1px solid black;
@@ -19,9 +29,6 @@ body {
 
 p { text-align: justify; }
 
-svg { background-color: #cccccc; }
-
-.donut-chart { background-color: #ffffff; }
 .bar-chart { float: left; }
 #bar-chart-footer{ float: inherit; }
 .scatter-plot { float: left; }
