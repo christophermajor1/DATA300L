@@ -5,6 +5,8 @@ body {
 }
 
 #container {
+  height: auto;
+  width: auto;
   border: 1px solid black;
   background-color: #cccccc;
   opacity: 0.9;
