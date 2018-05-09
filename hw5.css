@@ -10,6 +10,9 @@ body {
   font-size: 12px;
 }
 
+.a { visibility: visible; }
+.b { visibility: hidden; }
+
 #running th, td { padding: 0 1em 0.5ex; }
 #running tr { background: #eee; }
 #running tr:nth-child(even) { background: #FFF; }
