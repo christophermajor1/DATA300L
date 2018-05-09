@@ -21,6 +21,8 @@ p { text-align: justify; }
 
 svg { background-color: #cccccc; }
 
+#donut-chart { background-color: #ffffff; }
+
 #footer {
   font-size: 12px;
   text-align: justify;
