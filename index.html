@@ -217,6 +217,11 @@
               .domain([0, d3.max(data, function(d) { return parseInt(d["AVG Pace"]); })])
               .range([h - padding, padding]);
 
+            // avg stride legnth y-scale
+            var yScaleAVGSL = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return parseInt(d["Avg Stride Length"]); })])  
+              .range([h - padding, padding]);
+
             // distance x-axis
             var xAxisDist = d3.axisTop()
               .scale(xScaleDist)
@@ -256,6 +261,11 @@
             var yAxisAvgPace = d3.axisRight()
               .scale(yScaleAVGPace)
               .ticks(10);
+
+            //avg stride length
+            var yAxisAVGSL = d3.axisRight()
+              .scale(yScaleAVGSL)
+              .ticks(10);  
 
             d3.select("#container")
               .append("div")
@@ -590,7 +600,7 @@
                   .duration(200)
                   .style("opacity", .9);
 
-                div.html((d["Distance"]) +" Miles" + "<br/>"  + d["Calories"] + " Calories" + "<br/>"  +  "location: " + d["Location"] + "<br/>"  + "Activty type: " + d["Activity Type"] +"<br/>"  + "Average heart rate: " + d["Avg HR"])
+                div.html((d["Distance"]) +" Miles" + "<br/>"  + d["Calories"] + " Calories" + "<br/>"  +  "location: " + d["Location"] + "<br/>"  + "Activty type: " + d["Activity Type"] +"<br/>"  + "Average heart rate: " + d["Avg HR"] + "<br/>" + "Average Stride Length: " + d["Avg Stride Length"])
                   .style("left", (d3.event.pageX) + "px")
                   .style("top", (d3.event.pageY - 28) + "px");
               })
@@ -690,13 +700,13 @@
               })
               .html("Distance vs Avg HR");
 
-            // append avg stroke rate vs total strokes transition button
+            // append distance vs avg stride length button
             d3.select("#scatter-plot-footer")
               .append("button")
               .attr("class", "button")
               .on("click", function() {
                 d3.select("#scatter-plot-header")
-                  .html("Avg Stroke Rate vs Total Strokes")
+                  .html("Distance vs AVG Stride Length")
                   .transition();
 
                 // update scatter plot
@@ -705,10 +715,10 @@
                   .transition()
                   .duration(3000)
                   .attr("cx", function(d) {
-                    return xScaleAvgStrokeRate(d["Avg Stroke Rate"]);
+                    return xScaleDist(d["Distance"]);
                   })
                   .attr("cy", function(d) {
-                    return yScaleTotalStrokes(d["Total Strokes"]);
+                    return yScaleAVGSL(d["Avg Stride Length"]);
                   })
                   .attr("r", 3)
                   .attr("fill", "crimson");
@@ -717,15 +727,15 @@
                 svg2.select(".x-axis")
                   .transition()
                   .duration(3000)
-                  .call(xAxisAvgStrokeRate);
+                  .call(xAxisDist);
 
                 // update y-axis
                 svg2.select(".y-axis")
                   .transition()
                   .duration(3000)
-                  .call(yAxisTotalStrokes);
+                  .call(yAxisAVGSL);
               })
-              .html("Avg Stroke Rate vs Total Strokes");
+              .html("Distance VS AVG Stride Length");
 
             // append footer
             d3.select("#container")
