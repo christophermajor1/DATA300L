@@ -25,13 +25,11 @@
             data.forEach(function (d) {
               categories.add(d["Activity Type"]);
             });
-            console.log(categories);
 
             // before the next forEach, create a variable to hold the categoryCounts
             var countedCategory = [];
             categories.forEach(function(category) {
               // reduce is going to return the count of how many times category appears in data
-              console.log(category);
               data.reduce(function (count, d) { // first arg is the current count, not a category
                 if (category == d["Activity Type"]) {
                   countedCategory.push(d["Activity Type"]);
@@ -42,33 +40,52 @@
               }, 0); // reduce needs a second argument, which is the starting value for whatever you are computing
               // TODO once you have the count for this category, then you should add it to some list of categoryCounts
             });
-            //console.log(countedCategory);
-            var count = countedCategory.reduce(function(allCategories, category) {
-              if (category in allCategories) {
-                allCategories[category]++;
-              }
-              else {
-                allCategories[category] = 1;
-              }
-              return allCategories;
-            }, []);
-            console.log(count);
-            var outerRadius = 300 / 2;
-      			var innerRadius = 300 / 3;
+            var count = [],
+                runningCount = 0,
+                indoor_cyclingCount = 0,
+                lap_swimmingCount = 0,
+                track_runningCount = 0,
+                treadmill_runningCount = 0,
+                walkingCount = 0,
+                cyclingCount = 0;
+            for (var i = 0; i < countedCategory.length; i++) {
+              if (countedCategory[i] === "running") runningCount++;
+              else if (countedCategory[i] === "indoor_cycling") indoor_cyclingCount++;
+              else if (countedCategory[i] === "lap_swimming") lap_swimmingCount++;
+              else if (countedCategory[i] === "track_running") track_runningCount++;
+              else if (countedCategory[i] === "treadmill_running") treadmill_runningCount++;
+              else if (countedCategory[i] === "walking") walkingCount++;
+              else if (countedCategory[i] === "cycling") cyclingCount++;
+            }
+            count.push(runningCount);
+            count.push(indoor_cyclingCount);
+            count.push(lap_swimmingCount);
+            count.push(track_runningCount);
+            count.push(treadmill_runningCount);
+            count.push(walkingCount);
+            count.push(cyclingCount);
+
+            var radius = Math.min(350, 350) / 2;
             var arc = d3.arc()
-              .innerRadius(innerRadius)
-              .outerRadius(outerRadius);
+              .innerRadius(radius - 90)
+              .outerRadius(radius - 10);
 
             var pie = d3.pie();
 
             //Easy colors accessible via a 10-step ordinal scale
             var color = d3.scaleOrdinal(d3.schemeCategory10);
 
+            // Define the div for the tooltip
+            var div = d3.select("body").append("div")
+             .attr("class", "tooltip")
+             .style("opacity", 0);
+
             //Create SVG element
             var svg3 = d3.select("body")
               .append("svg")
-              .attr("width", "300")
-              .attr("height", "300");
+              .attr("id", "donut-chart")
+              .attr("width", "350")
+              .attr("height", "350");
 
             //Set up groups
             var arcs = svg3.selectAll("g.arc")
@@ -76,7 +93,7 @@
               .enter()
               .append("g")
               .attr("class", "arc")
-              .attr("transform", "translate(" + outerRadius + "," + outerRadius + ")");
+              .attr("transform", "translate(" + 350 / 2 + "," + 350 / 2 + ")");
 
             //Draw arc paths
             arcs.append("path")
@@ -87,13 +104,9 @@
 
             //Labels
             arcs.append("text")
-              .attr("transform", function(d) {
-                return "translate(" + arc.centroid(d) + ")";
-              })
               .attr("text-anchor", "middle")
-              .text(function(d) {
-                return d["Activity Type"];
-              });
+              .attr('y', -5)
+              .text("Activity Types");
 
             // chart variables
             var padding = 10,
@@ -198,11 +211,6 @@
             var yAxisAvgPace = d3.axisRight()
               .scale(yScaleAVGPace)
               .ticks(10);
-
-            // Define the div for the tooltip
-            var div = d3.select("body").append("div")
-             .attr("class", "tooltip")
-             .style("opacity", 0);
 
             // append barchart
             svg.selectAll("rect")
@@ -448,7 +456,7 @@
                 .duration(200)
                 .style("opacity", .9);
 
-              div .html((d["Distance"]) +" Miles" + "<br/>"  + d["Calories"] + " Calories" + "<br/>"  +  "location: " + d["Location"] + "<br/>"  + "Activty type: " + d["Activity Type"] +"<br/>"  + "Average heart rate: " + d["Avg HR"])
+              div.html((d["Distance"]) +" Miles" + "<br/>"  + d["Calories"] + " Calories" + "<br/>"  +  "location: " + d["Location"] + "<br/>"  + "Activty type: " + d["Activity Type"] +"<br/>"  + "Average heart rate: " + d["Avg HR"])
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
                })
