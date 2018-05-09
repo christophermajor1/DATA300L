@@ -10,9 +10,6 @@ body {
   font-size: 12px;
 }
 
-.a { visibility: visible; }
-.b { visibility: hidden; }
-
 #running th, td { padding: 0 1em 0.5ex; }
 #running tr { background: #eee; }
 #running tr:nth-child(even) { background: #FFF; }
@@ -24,7 +21,11 @@ p { text-align: justify; }
 
 svg { background-color: #cccccc; }
 
-#donut-chart { background-color: #ffffff; }
+.donut-chart { background-color: #ffffff; }
+.bar-chart { float: left; }
+#bar-chart-footer{ float: inherit; }
+.scatter-plot { float: left; }
+#scatter-plot-footer { float: inherit; }
 
 #footer {
   font-size: 12px;

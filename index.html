@@ -13,18 +13,19 @@
             // main header
             d3.select("body")
               .append("h1")
-              .text("Running Data")
+              .text("Drew's Exercise Data")
 
             // introductory paragraph
             d3.select("body")
               .append("p")
               .attr("id", "intro")
-              .text("Christopher Major, and I are interested in two things, running and data. Together, we decided that running data found on my smart watch might be an interesting place to compare and visualize data. The data available for this study includes running history recorded on my smart watch almost every day from 2016 to present. This including variables such as…… location, activity type, time, average/best pace, average heart rate/maximum heart rate, average stride length, calories burned, elevation gained/ lost, average and maximum cadence, distance, etc. In the running community a wide range of athletes use Garmin technologies to obtain information to further their knowledge of their body and their overall training. Our objective is to make visualizations and conclusions based off of my running data in the hope other people could benefit from our visualization as well. Anyone with a Garmin product can log into their account and export the data they have accumulated to fill out our visualization. This makes our visualization compatible for various athletes worldwide. We hope to show how heart rate dictates your overall fitness level. This will be accomplished using charts to show data like distances run over time, the pace those runs were at, and the average heart rate. I expect our results to show that on average, running a similar pace in the beginning of your training will result in a higher heart rate than at the completion of your training. Other interesting things to visualize for users could be how your cadence and stride length are related, and how those would then relate to your pace. However, the relation between pace and heart rate is our main focus in the project. While making accurate conclusions based solely off my own personal data will be inaccurate due to a small sample size and other outside factors, I hope to make some general conclusions based off the data available to me through both my Garmin Vívoactive smartwatch and Garmin soft strap premium heart rate monitor through visualizations.");
+              .text("Christopher Major and Andrew Burns are interested in two things, exercise and data. Together, we decided that exercise data found on my smart watch might be an interesting place to compare and visualize data. The data available for this study includes exercise history recorded on Drew's smart watch almost every day from 2016 to present. This including variables such as…… location, activity type, time, average/best pace, average heart rate/maximum heart rate, average stride length, calories burned, elevation gained/ lost, average and maximum cadence, distance, etc. In the running community a wide range of athletes use Garmin technologies to obtain information to further their knowledge of their body and their overall training. Our objective is to make visualizations and conclusions based off of my running data in the hope other people could benefit from our visualization as well. Anyone with a Garmin product can log into their account and export the data they have accumulated to fill out our visualization. This makes our visualization compatible for various athletes worldwide. We hope to show how heart rate dictates your overall fitness level. This will be accomplished using charts to show data like distances run over time, the pace those runs were at, and the average heart rate. I expect our results to show that on average, running a similar pace in the beginning of your training will result in a higher heart rate than at the completion of your training. Other interesting things to visualize for users could be how your cadence and stride length are related, and how those would then relate to your pace. However, the relation between pace and heart rate is our main focus in the project. While making accurate conclusions based solely off my own personal data will be inaccurate due to a small sample size and other outside factors, I hope to make some general conclusions based off the data available to me through both my Garmin Vívoactive smartwatch and Garmin soft strap premium heart rate monitor through visualizations.");
 
             var categories = new Set();
             data.forEach(function (d) {
               categories.add(d["Activity Type"]);
             });
+            console.log(categories);
 
             // before the next forEach, create a variable to hold the categoryCounts
             var countedCategory = [];
@@ -57,15 +58,16 @@
               else if (countedCategory[i] === "walking") walkingCount++;
               else if (countedCategory[i] === "cycling") cyclingCount++;
             }
-            count.push(runningCount);
-            count.push(indoor_cyclingCount);
-            count.push(lap_swimmingCount);
-            count.push(track_runningCount);
-            count.push(treadmill_runningCount);
-            count.push(walkingCount);
-            count.push(cyclingCount);
+            count.push(parseInt(runningCount));
+            count.push(parseInt(indoor_cyclingCount));
+            count.push(parseInt(lap_swimmingCount));
+            count.push(parseInt(track_runningCount));
+            count.push(parseInt(treadmill_runningCount));
+            count.push(parseInt(walkingCount));
+            count.push(parseInt(cyclingCount));
+            console.log(count);
 
-            var radius = Math.min(350, 350) / 2;
+            var radius = Math.min(600, 600) / 2;
             var arc = d3.arc()
               .innerRadius(radius - 90)
               .outerRadius(radius - 10);
@@ -83,48 +85,86 @@
             //Create SVG element
             var svg3 = d3.select("body")
               .append("svg")
-              .attr("id", "donut-chart")
-              .attr("width", "350")
-              .attr("height", "350");
+              .attr("class", "donut-chart")
+              .attr("width", "600")
+              .attr("height", "600")
+              .append("g")
+              .attr("transform", "translate(" + 600 / 2 + "," + 600 / 2 + ")");
 
             //Set up groups
-            var arcs = svg3.selectAll("g.arc")
+            var g = svg3.selectAll(".arc")
               .data(pie(count))
               .enter()
               .append("g")
-              .attr("class", "arc")
-              .attr("transform", "translate(" + 350 / 2 + "," + 350 / 2 + ")");
-
-            //Draw arc paths
-            arcs.append("path")
-              .attr("fill", function(d, i) {
-                return color(i);
-              })
-              .attr("d", arc);
+              .attr("class", "arc");
 
             //Labels
-            arcs.append("text")
+            g.append("text")
               .attr("text-anchor", "middle")
-              .attr('y', -5)
-              .text("Activity Types");
+              .attr("font-size", "1em")
+              .attr("y", -5)
+              .attr("fill", "#696969")
+              .html("Running: 309 entries");
+
+            g.append("text")
+              .attr("text-anchor", "middle")
+              .attr("font-size", "1em")
+              .attr("y", 10)
+              .attr("fill", "#696969")
+              .html("Indoor Cycling: 28 entries");
+
+            g.append("text")
+              .attr("text-anchor", "middle")
+              .attr("font-size", "1em")
+              .attr("y", 25)
+              .attr("fill", "#696969")
+              .html("Lap Swimming: 5 entries");
+
+            g.append("text")
+              .attr("text-anchor", "middle")
+              .attr("font-size", "1em")
+              .attr("y", 40)
+              .attr("fill", "#696969")
+              .html("Track Running: 1 entry");
+
+            g.append("text")
+              .attr("text-anchor", "middle")
+              .attr("font-size", "1em")
+              .attr("y", 55)
+              .attr("fill", "#696969")
+              .html("Treadmill Running: 13 entries");
+
+            g.append("text")
+              .attr("text-anchor", "middle")
+              .attr("font-size", "1em")
+              .attr("y", 70)
+              .attr("fill", "#696969")
+              .html("Walking: 6 entries");
+
+            g.append("text")
+              .attr("text-anchor", "middle")
+              .attr("font-size", "1em")
+              .attr("y", 85)
+              .attr("fill", "#696969")
+              .html("Cycling: 1 entry");
+
+            g.append("text")
+              .attr("text-anchor", "middle")
+              .attr("font-size", "2em")
+              .attr("y", -50)
+              .html("Activity Types");
+
+            //Draw arc paths
+            g.append("path")
+              .attr("d", arc)
+              .attr("fill", function(d, i) {
+                return color(i);
+              });
 
             // chart variables
             var padding = 10,
                 w = 1377,
                 h = 500;
-
-            // barchart headers
-            d3.select("body")
-              .append("h2")
-              .attr("id", "bar-chart-header")
-              .html("Max HR");
-
-            // barchart svg
-            var svg = d3.select("body")
-              .append("svg")
-              .attr("class", "bar-chart")
-              .attr("width", w)
-              .attr("height", h);
 
             // barchart x-scale
             var xScaleBar = d3.scaleBand()
@@ -212,6 +252,24 @@
               .scale(yScaleAVGPace)
               .ticks(10);
 
+            d3.select("body")
+              .append("div")
+              .attr("class", "bar-chart");
+
+            // barchart headers
+            d3.select(".bar-chart")
+              .append("h2")
+              .attr("id", "bar-chart-header")
+              .html("Max HR");
+
+            // barchart svg
+            var svg = d3.select(".bar-chart")
+              .append("svg")
+              .attr("class", "bar-chart")
+              .attr("width", w)
+              .attr("height", h);
+
+
             // append barchart
             svg.selectAll("rect")
               .data(data)
@@ -228,19 +286,22 @@
               .attr("height", function(d) {
                 return h - yScaleMaxHR(d["Max HR"]);
               })
-              .attr("fill", "crimson")
+              .attr("fill", "#2570cb")
+              // tooltip
+              .on("mouseover", function(d) {
+                div.transition()
+                  .duration(200)
+                  .style("opacity", .9);
 
-              /// mouseover
-              .on("mouseover", function() {
-                d3.select(this)
-                .attr("fill", "darkblue");
+                div.html((d["Distance"]) +" Miles" + "<br/>"  + d["Calories"] + " Calories" + "<br/>"  +  "location: " + d["Location"] + "<br/>"  + "Activty type: " + d["Activity Type"] +"<br/>"  + "Average heart rate: " + d["Avg HR"])
+                  .style("left", (d3.event.pageX) + "px")
+                  .style("top", (d3.event.pageY - 28) + "px");
               })
-              // mouseout
               .on("mouseout", function(d) {
-                d3.select(this)
-                .attr("fill", "crimson");
-              })
-              .on("click", function() {
+                div.transition()
+                  .style("opacity", 0);
+              });
+              /*.on("click", function() {
                 sortBars();
               });
             //Define sort order flag
@@ -269,7 +330,7 @@
               .attr("x", function(d, i) {
                 return xScaleBar(i);
               });
-            };
+            };*/
 
             // append y-axis
             svg.append("g")
@@ -278,7 +339,7 @@
               .call(yAxisMaxHR);
 
             // append bar chart footer
-            d3.select("body")
+            d3.select(".bar-chart")
               .append("p")
               .attr("id", "bar-chart-footer");
 
@@ -294,9 +355,11 @@
 
                 // update barchart
                 svg.selectAll("rect")
+                  .remove();
+                svg.selectAll("rect")
                   .data(data)
-                  .transition()
-                  .duration(3000)
+                  .enter()
+                  .append("rect")
                   .filter(function(d) { return !isNaN(parseInt(d["Calories"])) })
                   .attr("x", function(d, i) {
                     return xScaleBar(i);
@@ -308,7 +371,21 @@
                   .attr("height", function(d) {
                     return h - yScaleCal(d["Calories"]);
                   })
-                  .attr("fill", "crimson");
+                  .attr("fill", "#5179cd")
+                  // tooltip
+                  .on("mouseover", function(d) {
+                    div.transition()
+                      .duration(200)
+                      .style("opacity", .9);
+
+                    div.html((d["Distance"]) +" Miles" + "<br/>"  + d["Calories"] + " Calories" + "<br/>"  +  "location: " + d["Location"] + "<br/>"  + "Activty type: " + d["Activity Type"] +"<br/>"  + "Average heart rate: " + d["Avg HR"])
+                      .style("left", (d3.event.pageX) + "px")
+                      .style("top", (d3.event.pageY - 28) + "px");
+                  })
+                  .on("mouseout", function(d) {
+                    div.transition()
+                      .style("opacity", 0);
+                  });
 
                 // update axis
                 svg.select(".axis")
@@ -330,9 +407,11 @@
 
                 // update barchart
                 svg.selectAll("rect")
+                  .remove();
+                svg.selectAll("rect")
                   .data(data)
-                  .transition()
-                  .duration(3000)
+                  .enter()
+                  .append("rect")
                   .filter(function(d) { return !isNaN(parseInt(d["Max HR"])) })
                   .attr("x", function(d, i) {
                     return xScaleBar(i);
@@ -344,7 +423,21 @@
                   .attr("height", function(d) {
                     return h - yScaleMaxHR(d["Max HR"]);
                   })
-                  .attr("fill", "orange");
+                  .attr("fill", "#2570cb")
+                  // tooltip
+                  .on("mouseover", function(d) {
+                    div.transition()
+                      .duration(200)
+                      .style("opacity", .9);
+
+                    div.html((d["Distance"]) +" Miles" + "<br/>"  + d["Calories"] + " Calories" + "<br/>"  +  "location: " + d["Location"] + "<br/>"  + "Activty type: " + d["Activity Type"] +"<br/>"  + "Average heart rate: " + d["Avg HR"])
+                      .style("left", (d3.event.pageX) + "px")
+                      .style("top", (d3.event.pageY - 28) + "px");
+                  })
+                  .on("mouseout", function(d) {
+                    div.transition()
+                      .style("opacity", 0);
+                  });
 
                 // update axis
                 svg.select(".axis")
@@ -366,9 +459,11 @@
 
                 // update barchart
                 svg.selectAll("rect")
+                  .remove();
+                svg.selectAll("rect")
                   .data(data)
-                  .transition()
-                  .duration(3000)
+                  .enter()
+                  .append("rect")
                   .filter(function(d) { return !isNaN(parseInt(d["Avg HR"])); /* convert to Int first, then check NaN */})
                   .attr("x", function(d, i) {
                     return xScaleBar(i);
@@ -380,7 +475,21 @@
                   .attr("height", function(d) {
                     return h - yScaleAvgHR(d["Avg HR"]);
                   })
-                  .attr("fill", "blue");
+                  .attr("fill", "#29a939")
+                  // tooltip
+                  .on("mouseover", function(d) {
+                    div.transition()
+                      .duration(200)
+                      .style("opacity", .9);
+
+                    div.html((d["Distance"]) +" Miles" + "<br/>"  + d["Calories"] + " Calories" + "<br/>"  +  "location: " + d["Location"] + "<br/>"  + "Activty type: " + d["Activity Type"] +"<br/>"  + "Average heart rate: " + d["Avg HR"])
+                      .style("left", (d3.event.pageX) + "px")
+                      .style("top", (d3.event.pageY - 28) + "px");
+                  })
+                  .on("mouseout", function(d) {
+                    div.transition()
+                      .style("opacity", 0);
+                  });
 
                 // update axis
                 svg.select(".axis")
@@ -401,9 +510,11 @@
 
                 // update barchart
                 svg.selectAll("rect")
+                  .remove()
+                svg.selectAll("rect")
                   .data(data)
-                  .transition()
-                  .duration(3000)
+                  .enter()
+                  .append("rect")
                   .filter(function(d) { return !isNaN(parseInt(d["Max Cadence"])) })
                   .attr("x", function(d, i) {
                     return xScaleBar(i);
@@ -415,7 +526,21 @@
                   .attr("height", function(d) {
                     return h - yScaleMaxCadence(d["Max Cadence"]);
                   })
-                  .attr("fill", "gray");
+                  .attr("fill", "#e09815")
+                  // tooltip
+                  .on("mouseover", function(d) {
+                    div.transition()
+                      .duration(200)
+                      .style("opacity", .9);
+
+                    div.html((d["Distance"]) +" Miles" + "<br/>"  + d["Calories"] + " Calories" + "<br/>"  +  "location: " + d["Location"] + "<br/>"  + "Activty type: " + d["Activity Type"] +"<br/>"  + "Average heart rate: " + d["Avg HR"])
+                      .style("left", (d3.event.pageX) + "px")
+                      .style("top", (d3.event.pageY - 28) + "px");
+                  })
+                  .on("mouseout", function(d) {
+                    div.transition()
+                      .style("opacity", 0);
+                  });
 
                 // update axis
                 svg.select(".axis")
@@ -425,14 +550,18 @@
               })
               .html("Max Cadence");
 
-            // scatter plot headers
             d3.select("body")
+              .append("div")
+              .attr("class", "scatter-plot");
+
+            // scatter plot headers
+            d3.select(".scatter-plot")
               .append("h2")
               .attr("id", "scatter-plot-header")
-              .html("Distance vs Calories")
+              .html("Distance vs Calories");
 
             // scatter plot svg
-            var svg2 = d3.select("body")
+            var svg2 = d3.select(".scatter-plot")
               .append("svg")
               .attr("width", w)
               .attr("height", h);
@@ -453,18 +582,17 @@
 
               .on("mouseover", function(d) {
                 div.transition()
-                .duration(200)
-                .style("opacity", .9);
+                  .duration(200)
+                  .style("opacity", .9);
 
-              div.html((d["Distance"]) +" Miles" + "<br/>"  + d["Calories"] + " Calories" + "<br/>"  +  "location: " + d["Location"] + "<br/>"  + "Activty type: " + d["Activity Type"] +"<br/>"  + "Average heart rate: " + d["Avg HR"])
-                .style("left", (d3.event.pageX) + "px")
-                .style("top", (d3.event.pageY - 28) + "px");
-               })
-             .on("mouseout", function(d) {
-              div.transition()
-                .duration(500)
-                .style("opacity", 0);
-             });
+                div.html((d["Distance"]) +" Miles" + "<br/>"  + d["Calories"] + " Calories" + "<br/>"  +  "location: " + d["Location"] + "<br/>"  + "Activty type: " + d["Activity Type"] +"<br/>"  + "Average heart rate: " + d["Avg HR"])
+                  .style("left", (d3.event.pageX) + "px")
+                  .style("top", (d3.event.pageY - 28) + "px");
+              })
+              .on("mouseout", function(d) {
+                div.transition()
+                  .style("opacity", 0);
+              });
 
             // append x-axis
             svg2.append("g")
@@ -479,7 +607,7 @@
               .call(yAxisCal);
 
             // append scatter plot footer
-            d3.select("body")
+            d3.select(".scatter-plot")
               .append("p")
               .attr("id", "scatter-plot-footer");
 
@@ -598,7 +726,7 @@
             d3.select("body")
               .append("p")
               .attr("id", "footer")
-              .html("DATA 300L - 111 <br> Andrew Burns, Christopher Major <br> 04/25/2018 <br> <a href='updated_runnning_log.html' target='_blank'> Dataset </a>");
+              .html("DATA 300L - 111 <br> Andrew Burns, Christopher Major <br> 05/09/2018 <br> <a href='updated_runnning_log.html'> Dataset </a>");
           });
     </script>
   </body>
