@@ -17,6 +17,11 @@ body {
   text-align: justify;
 }
 
+#conclusion {
+  background: #cccccc
+  text-align: justify;
+}
+
 #running {
   border: 1px solid black;
   font-size: 12px;

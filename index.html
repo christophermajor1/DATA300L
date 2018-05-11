@@ -739,6 +739,11 @@
               })
               .html("Distance VS AVG Stride Length");
 
+              d3.select("#container")
+              .append("p")
+              .attr("id", "conclusion")
+              .text(" During the construction of our visualization we referred back to a few rules and principles of design. When forming the layout of the page we made sure to keep proximity in mind, making sure the buttons that correspond to the scatter plot are in close proximity to the graph to show the reader the correlation between the two. In regards to similarity we kept the buttons the same on both graphs to show that both provide very similar transitions. Our background decoration is very figurative. Showing the realistic outline of a runner helps to remind the reader what the visualization is about while catching their eye with some color and decoration. We felt this decoration was appropriate because it helped the visualization and didn’t interfere with the information we presented. We decided to keep our graphs familiar for the most part. Our visualization includes bar and scatter graphs but also changed it up with a circle graph depicting the amount of times each activity was performed. We compare a few different data points to keep the chart fun, but are also redundant in our examples, using the distance data point frequently. The interaction design principle of visibility is also apparent in our design. When making the tooltip for our scatterplot we were cognoscente of the readers need to continue to navigate the graphs and see the remaining dots. To assist the reader, we constructed the mouse over text box to be see-through. The user is given feedback from our visualization when interacting through instruction. This is seen when clicking on the buttons for different variables, the user is given an immediate response to know their action warranted a reaction. We constrain the user to interact with only a few of the data points to make our goal clearer. Another kind of interaction available in our Visualization is exploration with the tooltip mouse over for the scatter and bar graphs. ");
+
             // append footer
             d3.select("#container")
               .append("p")
