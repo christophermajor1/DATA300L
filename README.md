@@ -1,4 +1,6 @@
 # Data Visualization Final Project
+To view this visualization, download the repository and run the following command in the same directory from cmd or terminal:
+python -m http.server
 
 _Due date: Monday, 27 Apr 2018 11:59 pm_
 
